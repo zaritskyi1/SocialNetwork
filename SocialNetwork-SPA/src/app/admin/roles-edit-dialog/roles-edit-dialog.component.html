@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>{{data.name}} {{data.surname}} roles</h1>
+<div mat-dialog-content>
+  <ul>
+    <li *ngFor="let role of roles">
+      <mat-checkbox [(ngModel)]="role.isChecked">
+        {{role.roleName}}
+      </mat-checkbox>
+    </li>
+  </ul>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Close</button>
+  <button mat-raised-button (click)="updateRoles()" color="primary">Save changes</button>
+</div>

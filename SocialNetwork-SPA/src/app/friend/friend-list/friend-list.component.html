@@ -1,0 +1,22 @@
+<div class="main-div mat-elevation-z8">
+  <h1><mat-icon>people</mat-icon> Friends</h1>
+  <mat-card *ngFor="let friendship of friendships" class="friend-card">
+    <mat-card-title>
+      <span>
+        <a [routerLink]="['/user/', friendship.friend.id]">
+          {{ friendship.friend.name }} {{ friendship.friend.surname }}
+        </a>
+      </span>
+    </mat-card-title>
+    <mat-card-subtitle>{{friendship.friend.city}}, {{friendship.friend.country}}</mat-card-subtitle>
+    <mat-card-actions>
+      <button mat-raised-button color="primary">Message</button>
+      <button mat-raised-button color="warn">Remove</button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-paginator [length]="pagination.totalItems"
+            [pageSize]="pagination.itemsPerPage"
+            [pageSizeOptions]="[10, 20, 30, 40, 50]"
+            (page)="onPageChange($event)">
+  </mat-paginator>
+</div>

@@ -1,0 +1,10 @@
+.long-field {
+  width: 100% !important;
+}
+
+.alert {
+  padding: 15px;
+  background-color: #f4c136;
+  color: white;
+  border-radius: 5px;
+}

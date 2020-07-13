@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Message Details</h1>
+<div mat-dialog-content>
+  <ul>
+    <li>Id: {{message.id}}</li>
+    <li>Content: {{message.content}}</li>
+    <li>Send Date: {{message.createdDate | date}}</li>
+  </ul>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</div>

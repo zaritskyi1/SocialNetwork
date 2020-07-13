@@ -1,0 +1,47 @@
+<div fxLayoutAlign="center center" fxFlexFill class="main-div">
+  <mat-card fxFlex="25">
+    <mat-toolbar color="primary">Registration</mat-toolbar>
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="register()"
+      fxLayoutAlign="stretch"
+      fxLayout="column"
+      class="register-form"
+    >
+      <mat-form-field>
+        <input matInput placeholder="Username" formControlName="userName" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Password"
+          type="password"
+          formControlName="password"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Name" type="text" formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Surname"
+          type="text"
+          formControlName="surname"
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Choose a birthday date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateOfBirth"/>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary">Sign Up</button>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,24 @@
+.message-field {
+  margin-top: 1em;
+  width: 90% !important;
+}
+
+.message-button {
+    width: 10%;
+}
+
+.message-container {
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 3px;
+    height: auto;
+}
+
+.message-container span {
+    padding-left: 5px;
+}
+
+.receiver-message-container {
+    background-color: mediumorchid;
+    color: white;
+}

@@ -1,0 +1,19 @@
+<div class="main-div mat-elevation-z8">
+  <h1><mat-icon>email</mat-icon> Conversations</h1>
+  <div *ngIf="conversations.length === 0">
+    No conversations!
+  </div>
+  <mat-card *ngFor="let conversation of conversations">
+    <mat-card-title [routerLink]="['/conversations/', conversation.id]">
+        {{conversation.title}}
+    </mat-card-title>
+    <mat-card-subtitle>
+        {{conversation.lastMessageDate | date}}
+    </mat-card-subtitle>
+  </mat-card>
+  <mat-paginator [length]="pagination.totalItems"
+            [pageSize]="pagination.itemsPerPage"
+            [pageSizeOptions]="[10, 20, 30, 40, 50]"
+            (page)="onPageChange($event)">
+    </mat-paginator>
+</div>
