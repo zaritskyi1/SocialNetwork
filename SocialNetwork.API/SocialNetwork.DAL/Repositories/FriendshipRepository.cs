@@ -41,17 +41,15 @@ namespace SocialNetwork.DAL.Repositories
             _context.Friendships.Remove(friendship);
         }
 
-        public void UpdateFriendship(Friendship friendship)
-        {
-            _context.Friendships.Update(friendship);
-        }
-
         public Task<PagedList<Friendship>> GetAcceptedFriendshipsByUserId(
             string userId, QueryOptions queryOptions)
         {
             var query = _context.Friendships
                 .Where(f => (f.SenderId == userId || f.ReceiverId == userId)
                             && f.Status == FriendshipStatus.Accepted)
+                .Include(f => f.Sender)
+                .Include(f => f.Receiver)
+                .OrderByDescending(f => f.StatusChangedDate)
                 .AsQueryable();
 
             return PagedList<Friendship>.CreateAsync(query, queryOptions);
@@ -63,9 +61,17 @@ namespace SocialNetwork.DAL.Repositories
             var query = _context.Friendships
                 .Where(f => f.ReceiverId == receiverId && f.Status == FriendshipStatus.Pending)
                 .Include(f => f.Sender)
+                .OrderByDescending(f => f.StatusChangedDate)
                 .AsQueryable();
 
             return PagedList<Friendship>.CreateAsync(query, queryOptions);
+        }
+
+        public Task<Friendship> GetFriendshipBySenderAndReceiverId(string senderId, string receiverId)
+        {
+            return _context.Friendships.FirstOrDefaultAsync(f =>
+                f.SenderId == senderId && f.ReceiverId == receiverId ||
+                f.SenderId == receiverId && f.ReceiverId == senderId);
         }
     }
 }

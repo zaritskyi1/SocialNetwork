@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AlertifyService } from '../../_services/alertify.service';
-import { Friendship } from '../../_models/friendship';
-import { ActivatedRoute } from '@angular/router';
+import { FriendshipWithUser } from '../../_models/friendship-with-user';
 import { Pagination, PaginatedResult } from '../../_models/pagination';
 import { PageEvent } from '@angular/material/paginator';
 import { FriendService } from '../../_services/friend.service';
@@ -12,11 +11,10 @@ import { FriendService } from '../../_services/friend.service';
   styleUrls: ['./friend-list.component.css']
 })
 export class FriendListComponent implements OnInit {
-  friendships: Friendship[];
-  pagination: Pagination;
+  @Input() friendships: FriendshipWithUser[];
+  @Input() pagination: Pagination;
 
-  constructor(private route: ActivatedRoute, private alertify: AlertifyService,
-              private friendService: FriendService) { }
+  constructor(private friendService: FriendService, private alertify: AlertifyService) { }
 
   onPageChange(event: PageEvent) {
     this.pagination.currentPage = event.pageIndex + 1;
@@ -25,19 +23,26 @@ export class FriendListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.data.subscribe(data => {
-      this.friendships = data.friendships.result;
-      this.pagination = data.friendships.pagination;
-    });
   }
 
   loadFriendList() {
     this.friendService.getFriends(this.pagination.currentPage, this.pagination.itemsPerPage)
-    .subscribe((result: PaginatedResult<Friendship[]>) => {
+    .subscribe((result: PaginatedResult<FriendshipWithUser[]>) => {
       this.friendships = result.result;
       this.pagination = result.pagination;
     }, error => {
       this.alertify.error(error);
     });
+  }
+
+  removeFriend(id: string) {
+    this.friendService.removeFriendship(id).subscribe(
+      next => {
+        this.loadFriendList();
+        this.alertify.success('Friend removed!');
+      }, error => {
+        this.alertify.error(error);
+      }
+    );
   }
 }

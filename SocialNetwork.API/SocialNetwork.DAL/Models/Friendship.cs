@@ -5,8 +5,7 @@ namespace SocialNetwork.DAL.Models
     public enum FriendshipStatus
     {
         Pending,
-        Accepted,
-        Declined
+        Accepted
     }
 
     public class Friendship

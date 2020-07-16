@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserForList } from '../_models/userForList';
 import { User } from '../_models/user';
+import { FriendshipWithStatus } from '../_models/friendship-with-status';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class UserService {
 
   updateUser(id: string, user: User) {
     return this.http.put(this.baseUrl + 'users/' + id, user);
+  }
+
+  getFriendshipStatus(id: string): Observable<FriendshipWithStatus> {
+    return this.http.get<FriendshipWithStatus>(this.baseUrl + 'users/' + id + '/friendship-status');
   }
 }

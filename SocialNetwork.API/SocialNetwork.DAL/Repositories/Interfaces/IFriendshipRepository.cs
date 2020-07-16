@@ -10,8 +10,8 @@ namespace SocialNetwork.DAL.Repositories.Interfaces
         Task<bool> IsFriendshipExistsBySenderAndReceiverId(string senderId, string receiverId);
         void AddFriendship(Friendship friendship);
         void DeleteFriendship(Friendship friendship);
-        void UpdateFriendship(Friendship friendship);
         Task<PagedList<Friendship>> GetAcceptedFriendshipsByUserId(string userId, QueryOptions queryOptions);
         Task<PagedList<Friendship>> GetPendingFriendshipsByReceiverId(string receiverId, QueryOptions queryOptions);
+        Task<Friendship> GetFriendshipBySenderAndReceiverId(string senderId, string receiverId);
     }
 }

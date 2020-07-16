@@ -67,5 +67,15 @@ namespace SocialNetwork.Web.Controllers
 
             return paginationResult.Result;
         }
+
+        [HttpGet("{id}/friendship-status")]
+        public async Task<FriendshipDto> GetUserFriendshipStatus(string id)
+        {
+            var userId = HttpContext.GetUserId();
+
+            var friendship = await _friendshipService.GetFriendshipByUserIds(userId, id);
+
+            return friendship;
+        }
     }
 }

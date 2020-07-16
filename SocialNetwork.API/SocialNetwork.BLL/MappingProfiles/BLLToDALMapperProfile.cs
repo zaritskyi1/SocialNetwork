@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
+using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Friendship;
 using SocialNetwork.BLL.DTOs.Message;
 using SocialNetwork.BLL.DTOs.User;
@@ -17,6 +19,7 @@ namespace SocialNetwork.BLL.MappingProfiles
             ConfigureMessageMapping();
             ConfigureFriendshipMapping();
             ConfigurePaginationQueryMapping();
+            ConfigureConversationMapping();
         }
 
         private void ConfigureUserMapping()
@@ -40,12 +43,22 @@ namespace SocialNetwork.BLL.MappingProfiles
 
         private void ConfigureFriendshipMapping()
         {
-            CreateMap<FriendshipDto, Friendship>();
+            CreateMap<FriendshipForCreationDto, Friendship>();
         }
 
         private void ConfigurePaginationQueryMapping()
         {
             CreateMap<PaginationQuery, QueryOptions>();
+        }
+
+        private void ConfigureConversationMapping()
+        {
+            CreateMap<ConversationForCreationDto, Conversation>()
+                .ForMember(c => c.Participants, opt => opt.MapFrom(src => new List<Participant>()
+                {
+                    new Participant() {UserId = src.FirstUserId},
+                    new Participant() {UserId = src.SecondUserId}
+                }));
         }
     }
 }

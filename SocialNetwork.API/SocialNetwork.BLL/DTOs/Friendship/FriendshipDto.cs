@@ -1,14 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SocialNetwork.BLL.DTOs.Friendship
+﻿namespace SocialNetwork.BLL.DTOs.Friendship
 {
     public class FriendshipDto
     {
-        [Required]
-        [StringLength(36, MinimumLength = 36)]
-        public string SenderId { get; set; }
-        [Required]
-        [StringLength(36, MinimumLength = 36)]
+        public string Id { get; set; }
+        public string SenderId { get; set; } 
         public string ReceiverId { get; set; } 
+        public string Status { get; set; }
     }
 }

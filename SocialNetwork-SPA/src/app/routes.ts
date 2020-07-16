@@ -17,6 +17,7 @@ import { UserManagementComponent } from './admin/user-management/user-management
 import { MessageManagementComponent } from './admin/message-management/message-management.component';
 import { ConversationListComponent } from './conversation/conversation-list/conversation-list.component';
 import { ConversationDetailComponent } from './conversation/conversation-detail/conversation-detail.component';
+import { FriendshipInfoComponent } from './friend/friendship-info/friendship-info.component';
 
 export const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -27,7 +28,7 @@ export const appRoutes: Routes = [
         runGuardsAndResolvers: 'always',
         canActivate: [AuthGuard],
         children: [
-            { path: 'friends', component: FriendListComponent, resolve: { friendships: FriendListResolver } },
+            { path: 'friends', component: FriendshipInfoComponent, resolve: {friendships: FriendListResolver} },
             { path: 'user/edit', component: UserEditComponent, resolve: { user: UserEditResolver}, canDeactivate: [PreventUnsavedChanges] },
             { path: 'user/:id', component: UserDetailComponent, resolve: { user: UserDetailResolver } },
             { path: 'conversations/:id', component: ConversationDetailComponent },

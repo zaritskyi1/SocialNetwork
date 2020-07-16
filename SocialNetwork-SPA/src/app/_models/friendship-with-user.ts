@@ -1,6 +1,6 @@
 import { UserForList } from './userForList';
 
-export class Friendship {
+export interface FriendshipWithUser {
     id: string;
     friend: UserForList;
 }

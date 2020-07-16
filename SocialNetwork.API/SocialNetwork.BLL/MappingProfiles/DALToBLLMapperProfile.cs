@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Friendship;
 using SocialNetwork.BLL.DTOs.Message;
 using SocialNetwork.BLL.DTOs.MessageReport;
+using SocialNetwork.BLL.DTOs.Participant;
 using SocialNetwork.BLL.DTOs.User;
 using SocialNetwork.BLL.Helpers;
 using SocialNetwork.DAL.Helpers;
@@ -18,6 +20,8 @@ namespace SocialNetwork.BLL.MappingProfiles
             ConfigureMessageReportMapping();
             ConfigureFriendshipMapping();
             ConfigurePaginationMapping();
+            ConfigureConversationMapping();
+            ConfigureParticipantMapping();
         }
 
         private void ConfigurePaginationMapping()
@@ -49,6 +53,18 @@ namespace SocialNetwork.BLL.MappingProfiles
         private void ConfigureFriendshipMapping()
         {
             CreateMap<Friendship, FriendshipForListDto>();
+            CreateMap<Friendship, FriendshipDto>()
+                .ForMember(f => f.Status, opt => opt.MapFrom(f => f.Status.ToString()));
+        }
+
+        private void ConfigureConversationMapping()
+        {
+            CreateMap<Conversation, ConversationForListDto>();
+        }
+
+        private void ConfigureParticipantMapping()
+        {
+            CreateMap<Participant, ParticipantDto>();
         }
     }
 }

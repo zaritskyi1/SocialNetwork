@@ -48,4 +48,8 @@ export class AuthService {
 
     return hasRole;
   }
+
+  getCurrentUserId(): string {
+    return this.decodedToken.nameid;
+  }
 }

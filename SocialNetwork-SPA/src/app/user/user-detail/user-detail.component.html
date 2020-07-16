@@ -1,25 +1,52 @@
 <div class="main-div">
-    <mat-card>
-        <mat-card-header><h2>{{user.name}} {{user.surname}}</h2></mat-card-header>
-        <mat-card-subtitle>Status: {{user?.status}}</mat-card-subtitle>
-        <mat-card-content>
-            <mat-list>
-                <mat-list-item>Date of birth: {{user.dateOfBirth}}</mat-list-item>
-                <mat-divider></mat-divider>
-                <mat-list-item>Gender: {{user.gender}}</mat-list-item>
-                <mat-divider></mat-divider>
-                <mat-list-item>City: {{user.city}}</mat-list-item>
-                <mat-divider></mat-divider>
-                <mat-list-item>Country: {{user.country}}</mat-list-item>
-                <mat-divider></mat-divider>
-                <mat-list-item>Activities: {{user.activities}}</mat-list-item>
-                <mat-divider></mat-divider>
-                <mat-list-item>Favorite Movies: {{user.favoriteMovies}}</mat-list-item>
-                <mat-divider></mat-divider>
-                <mat-list-item>Favorite Games: {{user.favoriteGames}}</mat-list-item>
-                <mat-divider></mat-divider>
-                <mat-list-item>Favorite Quotes: {{user.favoriteQuotes}}</mat-list-item>
-              </mat-list>
-        </mat-card-content>
-    </mat-card>
+  <mat-card>
+    <mat-card-header>
+        <h2>{{ user.name }} {{ user.surname }}</h2>
+    </mat-card-header>
+    <mat-card-subtitle>Status: {{ user.status }}</mat-card-subtitle>
+    <div *ngIf="currentUserId != user.id">
+        <div *ngIf="friendshipWithStatus;else addFriendContent">
+            <button mat-raised-button [matMenuTriggerFor]="menu">Friendship status: {{ friendshipWithStatus?.status }}</button>
+            <mat-menu #menu="matMenu">
+                <button *ngIf="friendshipWithStatus.status == 'Accepted'" mat-menu-item (click)="removeFriend(friendshipWithStatus.id)">
+                  Remove from friendlist
+                </button>
+                <div *ngIf="friendshipWithStatus.status == 'Pending'">
+                    <button *ngIf="currentUserId == friendshipWithStatus.receiverId" mat-menu-item (click)="acceptFriendRequest(friendshipWithStatus.id)">
+                      Accept request
+                    </button>
+                    <button mat-menu-item (click)="declineFriendRequest(friendshipWithStatus.id)">
+                      Decline request
+                    </button>
+                </div>
+            </mat-menu>
+        </div>
+        <ng-template #addFriendContent>
+          <button mat-flat-button color="primary" (click)="addFriend(user.id)">Add friend</button>
+        </ng-template>
+    </div>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>Date of birth: {{ user.dateOfBirth }}</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>Gender: {{ user.gender }}</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>City: {{ user.city }}</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>Country: {{ user.country }}</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>Activities: {{ user.activities }}</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            Favorite Movies: {{ user.favoriteMovies }}
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>Favorite Games: {{ user.favoriteGames }}</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            Favorite Quotes: {{ user.favoriteQuotes }}
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
 </div>

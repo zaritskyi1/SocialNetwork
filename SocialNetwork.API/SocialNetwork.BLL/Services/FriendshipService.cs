@@ -25,50 +25,160 @@ namespace SocialNetwork.BLL.Services
 
         public async Task<PaginationResult<FriendshipForListDto>> GetUserFriends(string userId, PaginationQuery paginationQuery)
         {
-            var user = await _unitOfWork.UserRepository.GetUserById(userId);
-
-            if (user == null)
-            {
-                throw new EntityNotFoundException(typeof(User), userId);
-            }
-
             var queryOptions = _mapper.Map<QueryOptions>(paginationQuery);
 
             var users = await _unitOfWork.FriendshipRepository.GetAcceptedFriendshipsByUserId(userId, queryOptions);
 
-            var paginationResult = await ConvertToFriendshipForListDto(userId, users);
+            var paginationResult = ConvertToFriendshipForListDto(userId, users);
 
             return paginationResult;
         }
 
         public async Task<PaginationResult<FriendshipForListDto>> GetUserFriendshipsRequests(string userId, PaginationQuery paginationQuery)
         {
-            if (!await _unitOfWork.UserRepository.IsUserWithIdExists(userId))
-            {
-                throw new EntityNotFoundException(typeof(User), userId);
-            }
-
             var queryOptions = _mapper.Map<QueryOptions>(paginationQuery);
 
             var users = await _unitOfWork.FriendshipRepository.GetPendingFriendshipsByReceiverId(userId, queryOptions);
             
-            var paginationResult = _mapper.Map<PaginationResult<FriendshipForListDto>>(users);
+            var paginationResult = ConvertToFriendshipForListDto(userId, users);
 
             return paginationResult;
         }
 
-        public async Task AddFriendshipRequest(FriendshipDto friendshipDto)
+        public async Task<FriendshipDto> CreateFriendshipRequest(FriendshipForCreationDto friendshipForCreation)
         {
-            if (!await _unitOfWork.UserRepository.IsUserWithIdExists(friendshipDto.ReceiverId))
+            await ValidateFriendshipForCreation(friendshipForCreation);
+
+            var friendship = _mapper.Map<Friendship>(friendshipForCreation);
+
+            friendship.Status = FriendshipStatus.Pending;
+            friendship.StatusChangedDate = DateTime.Now;
+
+            _unitOfWork.FriendshipRepository.AddFriendship(friendship);
+            await _unitOfWork.Commit();
+
+            var friendshipDto = _mapper.Map<FriendshipDto>(friendship);
+
+            return friendshipDto;
+        }
+
+        public async Task AcceptFriendshipRequest(string userId, string friendshipId)
+        {
+            var friendship = await _unitOfWork.FriendshipRepository.GetFriendshipById(friendshipId);
+
+            if (friendship == null)
+            {
+                throw new EntityNotFoundException(typeof(Friendship), friendshipId);
+            }
+
+            if (friendship.ReceiverId != userId)
+            {
+                throw new AccessDeniedException(typeof(Friendship));
+            }
+
+            if (friendship.Status != FriendshipStatus.Pending)
+            {
+                throw new CreateFriendshipOperationException(friendshipId);
+            }
+
+            friendship.Status = FriendshipStatus.Accepted;
+            friendship.StatusChangedDate = DateTime.Now;
+
+            await _unitOfWork.Commit();
+        }
+
+        public async Task<FriendshipDto> GetFriendshipById(string userId, string friendshipId)
+        {
+            var friendship =
+                await _unitOfWork.FriendshipRepository.GetFriendshipById(friendshipId);
+
+            if (friendship == null)
+            {
+                throw new EntityNotFoundException(typeof(Friendship), friendshipId);
+            }
+
+            if (friendship.ReceiverId != userId && friendship.SenderId != userId)
+            {
+                throw new AccessDeniedException(typeof(Friendship));
+            }
+
+            var friendshipDto = _mapper.Map<FriendshipDto>(friendship);
+
+            return friendshipDto;
+        }
+
+        public async Task<FriendshipDto> GetFriendshipByUserIds(string currentUserId, string otherUserId)
+        {
+            var isUserExists = !await _unitOfWork.UserRepository.IsUserWithIdExists(otherUserId);
+
+            if (isUserExists)
+            {
+                throw new EntityNotFoundException(typeof(User), otherUserId);
+            }
+
+            var friendship =
+                await _unitOfWork.FriendshipRepository.GetFriendshipBySenderAndReceiverId(currentUserId, otherUserId);
+
+            if (friendship == null)
+            {
+                throw new EntityNotFoundException(typeof(Friendship), currentUserId + otherUserId);
+            }
+
+            var friendshipDto = _mapper.Map<FriendshipDto>(friendship);
+
+            return friendshipDto;
+        }
+
+        public async Task DeleteFriendship(string userId, string friendshipId)
+        {
+            var friendship = await _unitOfWork.FriendshipRepository.GetFriendshipById(friendshipId);
+
+            if (friendship == null)
+            {
+                throw new EntityNotFoundException(typeof(Friendship), friendshipId);
+            }
+
+            if (friendship.ReceiverId != userId && friendship.SenderId != userId)
+            {
+                throw new AccessDeniedException(typeof(Friendship));
+            }
+
+            _unitOfWork.FriendshipRepository.DeleteFriendship(friendship);
+
+            await _unitOfWork.Commit();
+        }
+
+        private PaginationResult<FriendshipForListDto> ConvertToFriendshipForListDto(string userId, PagedList<Friendship> friendships)
+        {
+            var friendshipsForList = _mapper.Map<PaginationResult<FriendshipForListDto>>(friendships);
+
+            for (int i = 0; i < friendships.Result.Count; i++)
+            {
+                var friendIsSender = friendships.Result[i].SenderId != userId;
+
+                var friend = friendIsSender ? friendships.Result[i].Sender : friendships.Result[i].Receiver;
+                
+                var friendForListDto = _mapper.Map<UserForListDto>(friend);
+
+                friendshipsForList.Result[i].Friend = friendForListDto;
+            }
+
+            return friendshipsForList;
+        }
+
+        private async Task ValidateFriendshipForCreation(FriendshipForCreationDto friendshipDto)
+        {
+            var isUserExists = await _unitOfWork.UserRepository.IsUserWithIdExists(friendshipDto.ReceiverId);
+
+            if (!isUserExists)
             {
                 throw new EntityNotFoundException(typeof(User), friendshipDto.ReceiverId);
             }
 
-            if (!await _unitOfWork.UserRepository.IsUserWithIdExists(friendshipDto.SenderId))
+            if (friendshipDto.ReceiverId == friendshipDto.SenderId)
             {
-                throw new EntityNotFoundException(typeof(User), friendshipDto.SenderId);
+                throw new CreateFriendshipOperationException(friendshipDto.ReceiverId);
             }
-
             
             var friendshipExisting = await _unitOfWork.FriendshipRepository.IsFriendshipExistsBySenderAndReceiverId(
                 friendshipDto.SenderId, friendshipDto.ReceiverId);
@@ -78,87 +188,6 @@ namespace SocialNetwork.BLL.Services
                 // TODO Exception for exist
                 throw new Exception();
             }
-
-            var newFriendship = _mapper.Map<Friendship>(friendshipDto);
-
-            newFriendship.Status = FriendshipStatus.Pending;
-            newFriendship.StatusChangedDate = DateTime.Now;
-
-            _unitOfWork.FriendshipRepository.AddFriendship(newFriendship);
-            await _unitOfWork.Commit();
-        }
-
-        public async Task AcceptFriendshipRequest(string userId, string friendshipId)
-        {
-            if (!await _unitOfWork.UserRepository.IsUserWithIdExists(userId))
-            {
-                throw new EntityNotFoundException(typeof(User), userId);
-            }
-
-            var friendship = await _unitOfWork.FriendshipRepository.GetFriendshipById(friendshipId);
-
-            if (friendship == null)
-            {
-                throw new EntityNotFoundException(typeof(Friendship), friendshipId);
-            }
-
-            if (friendship.ReceiverId != userId)
-            {
-                throw new AccessDeniedException(typeof(Friendship));
-            }
-
-            if (friendship.Status != FriendshipStatus.Pending)
-            {
-                throw new AcceptFriendshipOperationException(friendshipId);
-            }
-
-            friendship.Status = FriendshipStatus.Accepted;
-            friendship.StatusChangedDate = DateTime.Now;
-
-            await _unitOfWork.Commit();
-        }
-
-        public async Task DeclineFriendshipRequest(string userId, string friendshipId)
-        {
-            var friendship = await _unitOfWork.FriendshipRepository.GetFriendshipById(friendshipId);
-
-            if (friendship == null)
-            {
-                throw new EntityNotFoundException(typeof(Friendship), friendshipId);
-            }
-
-            if (friendship.ReceiverId != userId)
-            {
-                throw new AccessDeniedException(typeof(Friendship));
-            }
-
-            if (friendship.Status != FriendshipStatus.Pending)
-            {
-                throw new DeclineFriendshipOperationException(friendshipId);
-            }
-
-            friendship.Status = FriendshipStatus.Declined;
-            friendship.StatusChangedDate = DateTime.Now;
-
-            await _unitOfWork.Commit();
-        }
-
-        private async Task<PaginationResult<FriendshipForListDto>> ConvertToFriendshipForListDto(string userId, PagedList<Friendship> friendships)
-        {
-            var friendshipsForList = _mapper.Map<PaginationResult<FriendshipForListDto>>(friendships);
-
-            for (int i = 0; i < friendships.Result.Count; i++)
-            {
-                var friendId = friendships.Result[i].SenderId == userId ? friendships.Result[i].SenderId : friendships.Result[i].ReceiverId;
-
-                var friend = await _unitOfWork.UserRepository.GetUserById(friendId);
-                
-                var friendForListDto = _mapper.Map<UserForListDto>(friend);
-
-                friendshipsForList.Result[i].Friend = friendForListDto;
-            }
-
-            return friendshipsForList;
         }
     }
 }

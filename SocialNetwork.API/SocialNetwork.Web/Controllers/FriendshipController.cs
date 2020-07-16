@@ -49,7 +49,7 @@ namespace SocialNetwork.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateFriendshipRequest([FromBody]FriendshipDto friendshipDto)
+        public async Task<IActionResult> CreateFriendship([FromBody]FriendshipForCreationDto friendshipDto)
         {
             var id = HttpContext.GetUserId();
 
@@ -58,7 +58,28 @@ namespace SocialNetwork.Web.Controllers
                 throw new InvalidUserIdException(friendshipDto.SenderId);
             }
 
-            await _friendshipService.AddFriendshipRequest(friendshipDto);
+            var friendship  = await _friendshipService.CreateFriendshipRequest(friendshipDto);
+
+            return CreatedAtAction(nameof(GetFriendship), 
+                new { id = friendship.Id }, friendship);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<FriendshipDto> GetFriendship(string id)
+        {
+            var userId = HttpContext.GetUserId();
+
+            var friendship = await _friendshipService.GetFriendshipById(userId, id);
+
+            return friendship;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteFriendship(string id)
+        {
+            var userId = HttpContext.GetUserId();
+
+            await _friendshipService.DeleteFriendship(userId, id);
 
             return NoContent();
         }
@@ -70,17 +91,7 @@ namespace SocialNetwork.Web.Controllers
 
             await _friendshipService.AcceptFriendshipRequest(userId, id);
 
-            return Ok();
-        }
-
-        [HttpPut("{id}/decline")]
-        public async Task<IActionResult> DeclineFriendshipRequest(string id)
-        {
-            var userId = HttpContext.GetUserId();
-
-            await _friendshipService.DeclineFriendshipRequest(userId, id);
-
-            return Ok();
+            return NoContent();
         }
     }
 }

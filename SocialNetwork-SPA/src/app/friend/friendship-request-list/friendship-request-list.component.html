@@ -1,3 +1,21 @@
-<p>
-  friendship-request-list works!
-</p>
+<div class="main-div mat-elevation-z8">
+  <mat-card *ngFor="let friendship of friendships" class="friend-card">
+    <mat-card-title>
+      <span>
+        <a [routerLink]="['/user/', friendship.friend.id]">
+          {{ friendship.friend.name }} {{ friendship.friend.surname }}
+        </a>
+      </span>
+    </mat-card-title>
+    <mat-card-subtitle>{{friendship.friend.city}}, {{friendship.friend.country}}</mat-card-subtitle>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="acceptFriendRequest(friendship.id)">Accept</button>
+      <button mat-raised-button color="warn" (click)="declineFriendRequest(friendship.id)">Decline</button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-paginator [length]="pagination.totalItems"
+            [pageSize]="pagination.itemsPerPage"
+            [pageSizeOptions]="[10, 20, 30, 40, 50]"
+            (page)="onPageChange($event)">
+  </mat-paginator>
+</div>

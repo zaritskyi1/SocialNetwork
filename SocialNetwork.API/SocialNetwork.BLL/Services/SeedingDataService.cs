@@ -73,7 +73,7 @@ namespace SocialNetwork.BLL.Services
             {
                 for (int j = i + 1; j < _users.Count; j++)
                 {
-                    _friendshipService.AddFriendshipRequest(new FriendshipDto()
+                    _friendshipService.CreateFriendshipRequest(new FriendshipForCreationDto()
                     {
                         SenderId = _users[i].Id,
                         ReceiverId = _users[j].Id
