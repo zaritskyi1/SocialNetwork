@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using SocialNetwork.BLL.DTOs.Participant;
 
 namespace SocialNetwork.BLL.DTOs.Conversation
 {
@@ -10,7 +8,6 @@ namespace SocialNetwork.BLL.DTOs.Conversation
         public string Title { get; set; }
         public DateTime LastMessageDate { get; set; }
         public DateTime CreatedDate { get; set; }
-
-        public ICollection<ParticipantDto> Participants { get; set; }
+        public bool IsUnread { get; set; }
     }
 }

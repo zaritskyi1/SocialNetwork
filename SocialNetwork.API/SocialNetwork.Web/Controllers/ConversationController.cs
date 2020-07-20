@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Message;
+using SocialNetwork.BLL.DTOs.Participant;
 using SocialNetwork.BLL.Exceptions;
 using SocialNetwork.BLL.Helpers;
 using SocialNetwork.BLL.Services.Interfaces;
@@ -36,16 +37,8 @@ namespace SocialNetwork.Web.Controllers
                 throw new InvalidUserIdException(nameof(conversationForCreationDto.FirstUserId));
             }
 
-            var existingConversation = await _conversationService.GetConversationByUsersId(conversationForCreationDto.FirstUserId,
-                conversationForCreationDto.SecondUserId);
-
-            if (existingConversation != null)
-            {
-                return new RedirectToActionResult(nameof(GetConversation), nameof(ConversationController),
-                    new {id = existingConversation.Id});
-            }
-
             var conversation = await _conversationService.CreateConversation(conversationForCreationDto);
+
             return CreatedAtAction(nameof(GetConversation), new {id = conversation.Id}, conversation);
         }
 
@@ -72,6 +65,16 @@ namespace SocialNetwork.Web.Controllers
             return conversation;
         }
 
+        [HttpPut("{id}/read")]
+        public async Task<IActionResult> ReadConversation(string id)
+        {
+            var userId = HttpContext.GetUserId();
+
+            await _conversationService.MarkConversationAsRead(userId, id);
+
+            return NoContent();
+        }
+
         [HttpGet("{id}/messages")]
         public async Task<IEnumerable<MessageDto>> GetConversationMessages(string id,
             [FromQuery]PaginationQuery paginationQuery)
@@ -85,5 +88,17 @@ namespace SocialNetwork.Web.Controllers
             return paginationResult.Result;
         }
 
+        [HttpGet("{id}/participants")]
+        public async Task<IEnumerable<ParticipantDto>> GetConversationParticipants(string id,
+            [FromQuery]PaginationQuery paginationQuery)
+        {
+            var userId = HttpContext.GetUserId();
+
+            var paginationResult = await _conversationService.GetConversationParticipants(userId, id, paginationQuery);
+
+            Response.AddPagination(paginationResult.Information);
+
+            return paginationResult.Result;
+        }
     }
 }

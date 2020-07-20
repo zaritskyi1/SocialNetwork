@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Pipe } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -36,6 +36,9 @@ import { MessageListComponent } from './conversation/message-list/message-list.c
 import { ConversationDetailComponent } from './conversation/conversation-detail/conversation-detail.component';
 import { FriendshipInfoComponent } from './friend/friendship-info/friendship-info.component';
 import { FriendshipRequestListComponent } from './friend/friendship-request-list/friendship-request-list.component';
+import { ConversationDetailResolver } from './_resolvers/conversaton-detail.resolver';
+import { UserCardComponent } from './user/user-card/user-card.component';
+import { TimeAgoExtendsPipe } from './_pipes/time-ago-extends.pipe';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -61,7 +64,9 @@ export function tokenGetter() {
       ConversationDetailComponent,
       MessageListComponent,
       FriendshipInfoComponent,
-      FriendshipRequestListComponent
+      FriendshipRequestListComponent,
+      UserCardComponent,
+      TimeAgoExtendsPipe
    ],
    imports: [
       BrowserModule,
@@ -86,6 +91,7 @@ export function tokenGetter() {
       FriendListResolver,
       UserEditResolver,
       ConversationListResolver,
+      ConversationDetailResolver,
       MessagesResolver,
       PreventUnsavedChanges
    ],

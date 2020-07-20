@@ -7,6 +7,8 @@ import { FriendshipWithStatus } from 'src/app/_models/friendship-with-status';
 import { AuthService } from 'src/app/_services/auth.service';
 import { FriendService } from 'src/app/_services/friend.service';
 import { FriendshipRequest } from 'src/app/_models/friendship-request';
+import { Conversation } from 'src/app/_models/conversation';
+import { ConversationService } from 'src/app/_services/conversation.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -16,11 +18,12 @@ import { FriendshipRequest } from 'src/app/_models/friendship-request';
 export class UserDetailComponent implements OnInit {
   user: User;
   friendshipWithStatus: FriendshipWithStatus;
+  conversation: Conversation;
   currentUserId: string;
 
   constructor(private route: ActivatedRoute, private alertify: AlertifyService,
               private userService: UserService, private authService: AuthService,
-              private friendService: FriendService) { }
+              private friendService: FriendService, private conversationService: ConversationService) { }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
@@ -28,11 +31,30 @@ export class UserDetailComponent implements OnInit {
     });
 
     this.currentUserId = this.authService.getCurrentUserId();
+    this.loadFriendship();
+    this.loadConversation();
+  }
+
+  loadFriendship() {
     this.userService.getFriendshipStatus(this.route.snapshot.params.id).subscribe(
-      next => {
-        this.friendshipWithStatus = next;
+      result => {
+        this.friendshipWithStatus = result;
       }, error => {
-        this.friendshipWithStatus = null;
+        if (error.status === 404) {
+          this.friendshipWithStatus = null;
+          return;
+        }
+        this.alertify.error(error);
+      }
+    );
+  }
+
+  loadConversation() {
+    this.userService.getConversation(this.route.snapshot.params.id).subscribe(
+      result => {
+        this.conversation = result;
+      }, error => {
+        this.conversation = null;
       }
     );
   }
@@ -80,6 +102,21 @@ export class UserDetailComponent implements OnInit {
       next => {
         this.friendshipWithStatus = next;
         this.alertify.success('Request successfully sent!');
+      }, error => {
+        this.alertify.error(error);
+      }
+    );
+  }
+
+  createConversation() {
+    const conversation = {
+      firstUserId: this.currentUserId,
+      secondUserId: this.user.id
+    };
+
+    this.conversationService.createConversation(conversation).subscribe(
+      result => {
+        this.conversation = result;
       }, error => {
         this.alertify.error(error);
       }

@@ -8,7 +8,6 @@ namespace SocialNetwork.DAL.Repositories.Interfaces
     {
         void AddMessage(Message message);
         void DeleteMessage(Message message);
-        void UpdateMessage(Message message);
         Task<Message> GetMessageById(string id);
         Task<PagedList<Message>> GetMessagesByConversationId(string id, QueryOptions queryOptions);
     }

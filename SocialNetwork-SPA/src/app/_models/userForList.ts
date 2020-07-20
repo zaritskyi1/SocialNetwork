@@ -5,5 +5,6 @@ export interface UserForList {
     surname: string;
     city: string;
     country: string;
+    lastActive: Date;
     roles?: Array<string>;
 }

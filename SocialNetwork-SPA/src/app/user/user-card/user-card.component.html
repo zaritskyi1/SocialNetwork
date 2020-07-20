@@ -1,0 +1,11 @@
+<mat-card-title>
+  <span>
+    <a [routerLink]="['/user/', user.id]">
+      {{ user.name }} {{ user.surname }}
+    </a>
+  </span>
+</mat-card-title>
+<mat-card-subtitle>
+  Last active: {{user.lastActive | date:'medium' | timeAgo}} <br>
+  {{user.city}}, {{user.country}}
+</mat-card-subtitle>

@@ -6,7 +6,11 @@
     <div class="message-container" [ngClass]="{'receiver-message-container': message.userId === currentUserId}" *ngFor="let message of messages">
       <span>
         {{message.content}}
+        <small>
+          {{message.createdDate | date}}
+        </small>
       </span>
+      <span></span>
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>

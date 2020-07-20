@@ -1,0 +1,36 @@
+.conversation-unread {
+  background-color: blueviolet;
+  color: white;
+}
+
+.conversation-unread a {
+  color: white;
+}
+
+.conversation-unread a:hover {
+  color: violet;
+}
+
+a {
+  text-decoration: none;
+}
+
+.mat-card {
+  margin-bottom: 10px;
+}
+
+a:link {
+  color: blueviolet;
+}
+
+a:visited {
+  color: blueviolet;
+}
+
+a:hover {
+  color: violet;
+}
+
+a:active {
+  color: blueviolet;
+}

@@ -27,11 +27,6 @@ namespace SocialNetwork.DAL.Repositories
             _context.Messages.Remove(message);
         }
 
-        public void UpdateMessage(Message message)
-        {
-            _context.Update(message);
-        }
-
         public Task<Message> GetMessageById(string id)
         {
             return _context.Messages.Include(m => m.Conversation)

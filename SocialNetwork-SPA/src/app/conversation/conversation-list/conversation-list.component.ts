@@ -23,14 +23,12 @@ export class ConversationListComponent implements OnInit {
     this.pagination.currentPage = event.pageIndex + 1;
     this.pagination.itemsPerPage = event.pageSize;
     this.loadConversations();
-    this.transformConversations();
   }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
       this.conversations = data.conversations.result;
       this.pagination = data.conversations.pagination;
-      this.transformConversations();
     });
   }
 
@@ -39,21 +37,8 @@ export class ConversationListComponent implements OnInit {
     .subscribe((result: PaginatedResult<Conversation[]>) => {
       this.conversations = result.result;
       this.pagination = result.pagination;
-      this.transformConversations();
     }, error => {
       this.alertify.error(error);
-    });
-  }
-
-  transformConversations() {
-    this.conversations.forEach(conversation => {
-      if (conversation.title === null) {
-        if (conversation.participants[0].userId === this.authService.decodedToken.nameid) {
-          conversation.title = conversation.participants[1].user.name + ' ' + conversation.participants[1].user.surname;
-        } else {
-          conversation.title = conversation.participants[0].user.name + ' ' + conversation.participants[0].user.surname;
-        }
-      }
     });
   }
 }

@@ -3,7 +3,7 @@ import { ConversationService } from 'src/app/_services/conversation.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { Conversation } from 'src/app/_models/conversation';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/_services/auth.service';
+import { Participant } from 'src/app/_models/participant';
 
 @Component({
   selector: 'app-conversation-detail',
@@ -12,33 +12,28 @@ import { AuthService } from 'src/app/_services/auth.service';
 })
 export class ConversationDetailComponent implements OnInit {
   conversation: Conversation;
+  participants: Participant[];
 
   constructor(private route: ActivatedRoute, private conversationService: ConversationService,
-              private alertify: AlertifyService, private authService: AuthService) { }
+              private alertify: AlertifyService) { }
 
   ngOnInit() {
-    this.loadConversation();
+    this.route.data.subscribe(
+      data => {
+        this.conversation = data.conversation;
+      }
+    );
+    this.loadParticipants();
   }
 
-  loadConversation() {
+  loadParticipants() {
     const id: string = this.route.snapshot.paramMap.get('id');
-    this.conversationService.getConversation(id).subscribe(
+    this.conversationService.getConversationParticipants(id).subscribe(
       result => {
-        this.conversation = result;
-        this.transformConversation();
+        this.participants = result.result;
       }, error => {
         this.alertify.error(error);
       }
     );
-  }
-
-  transformConversation() {
-    if (this.conversation.title === null) {
-      if (this.conversation.participants[0].userId === this.authService.decodedToken.nameid) {
-        this.conversation.title = this.conversation.participants[1].user.name + ' ' + this.conversation.participants[1].user.surname;
-      } else {
-        this.conversation.title = this.conversation.participants[0].user.name + ' ' + this.conversation.participants[0].user.surname;
-      }
-    }
   }
 }

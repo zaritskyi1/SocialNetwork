@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Message;
+using SocialNetwork.BLL.DTOs.Participant;
 using SocialNetwork.BLL.Exceptions;
 using SocialNetwork.BLL.Helpers;
 using SocialNetwork.BLL.Services.Interfaces;
@@ -55,7 +56,7 @@ namespace SocialNetwork.BLL.Services
 
             var conversations = await _unitOfWork.ConversationRepository.GetConversationsByUserId(userId, queryOptions);
 
-            var paginationResult = _mapper.Map<PaginationResult<ConversationForListDto>>(conversations);
+            var paginationResult = ConvertToConversationForList(userId, conversations);
 
             return paginationResult;
         }
@@ -96,7 +97,7 @@ namespace SocialNetwork.BLL.Services
                 throw new AccessDeniedException(typeof(Conversation));
             }
 
-            var conversationForList = _mapper.Map<Conversation, ConversationForListDto>(conversation);
+            var conversationForList = ConvertToConversationForList(userId, conversation);
 
             return conversationForList;
         }
@@ -110,34 +111,77 @@ namespace SocialNetwork.BLL.Services
             return conversationForList;
         }
 
-        public async Task MarkConversationAsUnreadExceptUser(string userId, string conversationId)
+        public async Task<PaginationResult<ParticipantDto>> GetConversationParticipants(string userId,
+            string conversationId, PaginationQuery paginationQuery)
         {
-            var participants = await _unitOfWork.ParticipantRepository.GetParticipantsByConversationId(conversationId);
+            var queryOptions = _mapper.Map<QueryOptions>(paginationQuery);
 
-            foreach (var participant in participants)
+            var participants = await _unitOfWork.ParticipantRepository.GetPagedParticipantsByConversationId(conversationId, queryOptions);
+
+            if (participants == null)
             {
-                if (participant.UserId != userId)
-                {
-                    participant.HasUnreadMessages = true;
-                }
+                throw new EntityNotFoundException(typeof(Participant), conversationId);
             }
 
-            await _unitOfWork.Commit();
+            var paginationResult = _mapper.Map<PaginationResult<ParticipantDto>>(participants);
+
+            return paginationResult;
         }
 
         public async Task MarkConversationAsRead(string userId, string conversationId)
         {
-            var participants = await _unitOfWork.ParticipantRepository.GetParticipantsByConversationId(conversationId);
+            var participant =
+                await _unitOfWork.ParticipantRepository.GetParticipantByUserConversationId(userId, conversationId);
 
-            foreach (var participant in participants)
+            if (participant == null)
             {
-                if (participant.UserId == userId)
+                throw new EntityNotFoundException(typeof(Participant), conversationId + userId);
+            }
+
+            participant.HasUnreadMessages = false;
+
+            await _unitOfWork.Commit();
+        }
+
+        private PaginationResult<ConversationForListDto> ConvertToConversationForList(string userId, PagedList<Conversation> pagedConversations)
+        {
+            var paginationResult = _mapper.Map<PaginationResult<ConversationForListDto>>(pagedConversations);
+            var conversations = pagedConversations.Result;
+
+            for (var i = 0; i < conversations.Count; i++)
+            {
+                var participantsDto = conversations[i].Participants;
+
+                foreach (var participantDto in participantsDto)
                 {
-                    participant.HasUnreadMessages = false;
-                    await _unitOfWork.Commit();
-                    return;
+                    if (participantDto.UserId == userId)
+                    {
+                        paginationResult.Result[i].IsUnread = participantDto.HasUnreadMessages;
+                    }
+                    else
+                    {
+                        paginationResult.Result[i].Title = participantDto.User.Name + " " + participantDto.User.Surname;
+                    }
                 }
             }
+
+            return paginationResult;
+        }
+
+        private ConversationForListDto ConvertToConversationForList(string userId, Conversation conversation)
+        {
+            var conversationForList = _mapper.Map<Conversation, ConversationForListDto>(conversation);
+
+            foreach (var participant in conversation.Participants)
+            {
+                if (participant.UserId != userId)
+                {
+                    conversationForList.Title = participant.User.Name + " " + participant.User.Surname;
+                    return conversationForList;
+                }
+            }
+
+            throw new EntityNotFoundException(typeof(Participant), userId);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Friendship;
 using SocialNetwork.BLL.DTOs.User;
 using SocialNetwork.BLL.Helpers;
@@ -19,12 +20,15 @@ namespace SocialNetwork.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IFriendshipService _friendshipService;
+        private readonly IConversationService _conversationService;
 
         public UserController(IUserService userService, 
-            IFriendshipService friendshipService)
+            IFriendshipService friendshipService,
+            IConversationService conversationService)
         {
             _userService = userService;
             _friendshipService = friendshipService;
+            _conversationService = conversationService;
         }
 
         [HttpGet]
@@ -76,6 +80,16 @@ namespace SocialNetwork.Web.Controllers
             var friendship = await _friendshipService.GetFriendshipByUserIds(userId, id);
 
             return friendship;
+        }
+
+        [HttpGet("{id}/conversation")]
+        public async Task<ConversationForListDto> GetUserConversation(string id)
+        {
+            var userId = HttpContext.GetUserId();
+
+            var conversation = await _conversationService.GetConversationByUsersId(userId, id);
+
+            return conversation;
         }
     }
 }

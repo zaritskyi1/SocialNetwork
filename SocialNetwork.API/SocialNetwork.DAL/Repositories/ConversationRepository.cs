@@ -41,8 +41,7 @@ namespace SocialNetwork.DAL.Repositories
         {
             return _context.Conversations
                 .AnyAsync(c => c.Participants.All(
-                    p => p.UserId == firstUserId 
-                         || p.UserId == secondUserId));
+                    p => p.UserId == firstUserId || p.UserId == secondUserId));
         }
 
         public Task<Conversation> GetConversationById(string id)
@@ -58,17 +57,9 @@ namespace SocialNetwork.DAL.Repositories
             var query = _context.Conversations
                 .Where(c => c.Participants.Any(p => p.UserId == userId))
                 .OrderByDescending(c => c.LastMessageDate)
-                .AsQueryable();
-
-            //var query = from conversation in _context.Conversations
-            //        join participant in _context.Participants
-            //            on new { ConversationId = conversation.Id, UserId = userId }
-            //            equals new { participant.ConversationId, participant.UserId }
-            //        select conversation; //TODO: remove comment
-
-            query = query
                 .Include(c => c.Participants)
-                .ThenInclude(p => p.User);
+                .ThenInclude(p => p.User)
+                .AsQueryable();
 
             return PagedList<Conversation>.CreateAsync(query, queryOptions);
         }
@@ -77,8 +68,7 @@ namespace SocialNetwork.DAL.Repositories
         {
             return _context.Conversations
                 .FirstOrDefaultAsync(c => c.Participants
-                    .All(p => p.UserId == firstUserId 
-                              || p.UserId == secondUserId));
+                    .All(p => p.UserId == firstUserId || p.UserId == secondUserId));
         }
     }
 }

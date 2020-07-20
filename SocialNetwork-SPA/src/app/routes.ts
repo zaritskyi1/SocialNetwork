@@ -18,6 +18,7 @@ import { MessageManagementComponent } from './admin/message-management/message-m
 import { ConversationListComponent } from './conversation/conversation-list/conversation-list.component';
 import { ConversationDetailComponent } from './conversation/conversation-detail/conversation-detail.component';
 import { FriendshipInfoComponent } from './friend/friendship-info/friendship-info.component';
+import { ConversationDetailResolver } from './_resolvers/conversaton-detail.resolver';
 
 export const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -31,7 +32,7 @@ export const appRoutes: Routes = [
             { path: 'friends', component: FriendshipInfoComponent, resolve: {friendships: FriendListResolver} },
             { path: 'user/edit', component: UserEditComponent, resolve: { user: UserEditResolver}, canDeactivate: [PreventUnsavedChanges] },
             { path: 'user/:id', component: UserDetailComponent, resolve: { user: UserDetailResolver } },
-            { path: 'conversations/:id', component: ConversationDetailComponent },
+            { path: 'conversations/:id', component: ConversationDetailComponent, resolve: { conversation: ConversationDetailResolver } },
             { path: 'conversations', component: ConversationListComponent, resolve: { conversations: ConversationListResolver } },
             { path: 'admin', component: AdminPanelComponent, data: {roles: ['Administrator', 'Moderator']} },
             { path: 'admin/users', component: UserManagementComponent },

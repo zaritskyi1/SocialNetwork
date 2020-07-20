@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Routing;
 using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Friendship;
 using SocialNetwork.BLL.DTOs.Message;
@@ -38,7 +39,8 @@ namespace SocialNetwork.BLL.MappingProfiles
 
         private void ConfigureMessageMapping()
         {
-            CreateMap<MessageForCreation, Message>();
+            CreateMap<MessageForCreation, Message>()
+                .ForMember(m => m.CreatedDate, opt => opt.MapFrom(src => DateTime.Now));
         }
 
         private void ConfigureFriendshipMapping()

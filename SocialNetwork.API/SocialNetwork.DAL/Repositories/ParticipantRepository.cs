@@ -18,21 +18,6 @@ namespace SocialNetwork.DAL.Repositories
             _context = context;
         }
 
-        public void AddParticipant(Participant participant)
-        {
-            _context.Participants.Add(participant);
-        }
-
-        public void DeleteParticipant(Participant participant)
-        {
-            _context.Participants.Add(participant);
-        }
-
-        public void UpdateParticipant(Participant participant)
-        {
-            _context.Participants.Update(participant);
-        }
-
         public Task<Participant> GetParticipantByUserConversationId(string userId, string conversationId)
         {
             return _context.Participants.FirstOrDefaultAsync(p =>
@@ -43,6 +28,7 @@ namespace SocialNetwork.DAL.Repositories
         {
             return _context.Participants
                 .Where(p => p.ConversationId == conversationId)
+                .Include(p => p.User)
                 .ToListAsync();
         }
 
@@ -50,15 +36,7 @@ namespace SocialNetwork.DAL.Repositories
         {
             var query = _context.Participants
                 .Where(p => p.ConversationId == conversationId)
-                .AsQueryable();
-
-            return PagedList<Participant>.CreateAsync(query, queryOptions);
-        }
-
-        public Task<PagedList<Participant>> GetPagedParticipantsByUserId(string userId, QueryOptions queryOptions)
-        {
-            var query = _context.Participants
-                .Where(p => p.UserId == userId)
+                .Include(p => p.User)
                 .AsQueryable();
 
             return PagedList<Participant>.CreateAsync(query, queryOptions);

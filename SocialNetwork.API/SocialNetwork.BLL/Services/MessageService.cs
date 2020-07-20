@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using SocialNetwork.BLL.DTOs.Message;
@@ -32,14 +32,11 @@ namespace SocialNetwork.BLL.Services
             }
 
             var message = _mapper.Map<Message>(messageForCreation);
-            message.CreatedDate = DateTime.Now;
-
             _unitOfWork.MessageRepository.AddMessage(message);
-            await _conversationService.MarkConversationAsUnreadExceptUser(messageForCreation.UserId,
-                messageForCreation.ConversationId);
 
             var conversation = await _unitOfWork.ConversationRepository.GetConversationById(message.ConversationId);
-            conversation.LastMessageDate = DateTime.Now;
+            
+            UpdateConversationWithMessage(message, conversation);
 
             await _unitOfWork.Commit();
 
@@ -82,6 +79,26 @@ namespace SocialNetwork.BLL.Services
 
             _unitOfWork.MessageRepository.DeleteMessage(message);
             await _unitOfWork.Commit();
+        }
+
+        private void UpdateConversationWithMessage(Message message, Conversation conversation)
+        {
+            conversation.LastMessageDate = message.CreatedDate;
+
+            var participants = conversation.Participants;
+
+            UpdateParticipantsHasUnreadExceptUserId(message.UserId, participants);
+        }
+
+        private void UpdateParticipantsHasUnreadExceptUserId(string userId, IEnumerable<Participant> participants)
+        {
+            foreach (var participant in participants)
+            {
+                if (participant.UserId != userId)
+                {
+                    participant.HasUnreadMessages = true;
+                }
+            }
         }
     }
 }

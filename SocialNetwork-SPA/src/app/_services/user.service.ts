@@ -5,28 +5,33 @@ import { environment } from 'src/environments/environment';
 import { UserForList } from '../_models/userForList';
 import { User } from '../_models/user';
 import { FriendshipWithStatus } from '../_models/friendship-with-status';
+import { Conversation } from '../_models/conversation';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl = environment.apiUrl;
+  baseUrl = environment.apiUrl + 'users/';
 
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<UserForList[]> {
-    return this.http.get<UserForList[]>(this.baseUrl + 'users');
+    return this.http.get<UserForList[]>(this.baseUrl);
   }
 
   getUser(id): Observable<User> {
-    return this.http.get<User>(this.baseUrl + 'users/' + id);
+    return this.http.get<User>(this.baseUrl + id);
   }
 
   updateUser(id: string, user: User) {
-    return this.http.put(this.baseUrl + 'users/' + id, user);
+    return this.http.put(this.baseUrl + id, user);
   }
 
   getFriendshipStatus(id: string): Observable<FriendshipWithStatus> {
-    return this.http.get<FriendshipWithStatus>(this.baseUrl + 'users/' + id + '/friendship-status');
+    return this.http.get<FriendshipWithStatus>(this.baseUrl + id + '/friendship-status');
+  }
+
+  getConversation(id: string): Observable<Conversation> {
+    return this.http.get<Conversation>(this.baseUrl + id + '/conversation');
   }
 }

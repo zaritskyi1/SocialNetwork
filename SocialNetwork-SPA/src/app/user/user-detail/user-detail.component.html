@@ -1,9 +1,9 @@
 <div class="main-div">
   <mat-card>
     <mat-card-header>
-        <h2>{{ user.name }} {{ user.surname }}</h2>
+        <mat-card-title><h2>{{ user.name }} {{ user.surname }}</h2></mat-card-title>
+        <mat-card-subtitle>Last active {{ user.lastActive | date:'medium' | timeAgo }}</mat-card-subtitle>
     </mat-card-header>
-    <mat-card-subtitle>Status: {{ user.status }}</mat-card-subtitle>
     <div *ngIf="currentUserId != user.id">
         <div *ngIf="friendshipWithStatus;else addFriendContent">
             <button mat-raised-button [matMenuTriggerFor]="menu">Friendship status: {{ friendshipWithStatus?.status }}</button>
@@ -24,9 +24,19 @@
         <ng-template #addFriendContent>
           <button mat-flat-button color="primary" (click)="addFriend(user.id)">Add friend</button>
         </ng-template>
+        <div *ngIf="conversation;else createConversationContent">
+          <button mat-flat-button [routerLink]="['/conversations/' + conversation.id]" color="primary">
+            Go to conversation
+          </button>
+        </div>
+        <ng-template #createConversationContent>
+          <button mat-flat-button color="primary" (click)="createConversation()">Create Conversation</button>
+        </ng-template>
     </div>
     <mat-card-content>
       <mat-list>
+        <mat-list-item>Status: {{ user.status }}</mat-list-item>
+        <mat-divider></mat-divider>
         <mat-list-item>Date of birth: {{ user.dateOfBirth }}</mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>Gender: {{ user.gender }}</mat-list-item>

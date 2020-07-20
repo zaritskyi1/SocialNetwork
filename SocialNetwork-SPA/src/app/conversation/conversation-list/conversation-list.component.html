@@ -3,9 +3,11 @@
   <div *ngIf="conversations.length === 0">
     No conversations!
   </div>
-  <mat-card *ngFor="let conversation of conversations">
-    <mat-card-title [routerLink]="['/conversations/', conversation.id]">
-        {{conversation.title}}
+  <mat-card class="mat-elevation-z2" *ngFor="let conversation of conversations" [ngClass]="{'conversation-unread': conversation.isUnread}">
+    <mat-card-title>
+      <span><a [routerLink]="['/conversations/', conversation.id]">
+      {{conversation.title}}
+      </a></span>
     </mat-card-title>
     <mat-card-subtitle>
         {{conversation.lastMessageDate | date}}

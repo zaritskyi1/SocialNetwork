@@ -76,5 +76,4 @@ export class MessageListComponent implements OnInit {
     });
     this.messageForSent.content = '';
   }
-
 }
