@@ -11,15 +11,11 @@ namespace SocialNetwork.BLL.Services
     public class MessageService : IMessageService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IConversationService _conversationService;
         private readonly IMapper _mapper;
 
-        public MessageService(IUnitOfWork unitOfWork,
-            IConversationService conversationService,
-            IMapper mapper)
+        public MessageService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _conversationService = conversationService;
             _mapper = mapper;
         }
 
@@ -81,7 +77,7 @@ namespace SocialNetwork.BLL.Services
             await _unitOfWork.Commit();
         }
 
-        private void UpdateConversationWithMessage(Message message, Conversation conversation)
+        private static void UpdateConversationWithMessage(Message message, Conversation conversation)
         {
             conversation.LastMessageDate = message.CreatedDate;
 
@@ -90,7 +86,7 @@ namespace SocialNetwork.BLL.Services
             UpdateParticipantsHasUnreadExceptUserId(message.UserId, participants);
         }
 
-        private void UpdateParticipantsHasUnreadExceptUserId(string userId, IEnumerable<Participant> participants)
+        private static void UpdateParticipantsHasUnreadExceptUserId(string userId, IEnumerable<Participant> participants)
         {
             foreach (var participant in participants)
             {

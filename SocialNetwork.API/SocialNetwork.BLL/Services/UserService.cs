@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using SocialNetwork.BLL.DTOs.User;
 using SocialNetwork.BLL.Exceptions;
 using SocialNetwork.BLL.Helpers;
@@ -14,11 +15,13 @@ namespace SocialNetwork.BLL.Services
 {
     public class UserService : IUserService
     {
+        private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserService(UserManager<User> userManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _userManager = userManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -31,19 +34,12 @@ namespace SocialNetwork.BLL.Services
 
             var paginationResult = _mapper.Map<PaginationResult<UserDto>>(users);
 
-            //var paginationResult = new PaginationResult<UserDto>()
-            //{
-            //    Result = usersDto,
-            //    Information = new PaginationInfo(users.CurrentPage, 
-            //        users.PageSize, users.TotalCount, users.TotalPages)
-            //};
-
             return paginationResult;
         }
 
         public async Task<UserDto> GetUserById(string id)
         {
-            var user = await _unitOfWork.UserRepository.GetUserById(id);
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
@@ -57,8 +53,8 @@ namespace SocialNetwork.BLL.Services
 
         public async Task UpdateUserInformation(string id, UserForUpdateDto userForUpdate)
         {
-            var user = await _unitOfWork.UserRepository.GetUserById(id);
-
+            var user = await _userManager.FindByIdAsync(id);
+            
             if (user == null)
             {
                 throw new EntityNotFoundException(typeof(User), id);
@@ -69,16 +65,16 @@ namespace SocialNetwork.BLL.Services
             await _unitOfWork.Commit();
         }
 
-        public async Task UpdateUserActivity(string id)
+        public async Task UpdateUserActivity(string id, DateTime date)
         {
-            var user = await _unitOfWork.UserRepository.GetUserById(id);
+            var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
                 throw new EntityNotFoundException(typeof(User), id);
             }
 
-            user.LastActive = DateTime.Now;
+            user.LastActive = date;
 
             await _unitOfWork.Commit();
         }

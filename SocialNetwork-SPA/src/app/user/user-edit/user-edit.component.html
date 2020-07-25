@@ -1,134 +1,158 @@
 <div class="main-div">
-    <mat-card>
-        <div *ngIf="editForm.dirty" class="alert">
-            <strong>Warning! </strong>You made some changes. Any unsaved changes will be lost!
-        </div>
-        <mat-card-header><h2>{{user.name}} {{user.surname}}</h2></mat-card-header>
-        <mat-card-content>
-            <form [formGroup]="editForm" (ngSubmit)="editUserData()">
-                <mat-accordion>
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Status
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                Change your profile status
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <mat-form-field class="long-field">
-                            <input matInput formControlName="status">
-                        </mat-form-field>
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Date of birth
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                Change your birth date
-                                <mat-icon>account_circle</mat-icon>
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        
-                        <mat-form-field appearance="fill">
-                            <mat-label>Choose birthday date</mat-label>
-                            <input matInput [matDatepicker]="picker" formControlName="birthDate">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker ></mat-datepicker>
-                          </mat-form-field>                          
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Gender
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                Change your gender
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <mat-form-field>
-                            <input matInput formControlName="gender">
-                        </mat-form-field>
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                City and Country
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                Change your city and coutry information
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <mat-form-field>
-                            <input matInput formControlName="city">
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput formControlName="country">
-                        </mat-form-field>
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Activities
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                Change information about your activities
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <mat-form-field class="long-field" appearance="outline">
-                            <textarea matInput cdkTextareaAutosize formControlName="activities"></textarea>
-                        </mat-form-field>
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Favorite Movies
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                Change information about your favorite movies
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <mat-form-field class="long-field" appearance="outline">
-                            <textarea matInput cdkTextareaAutosize formControlName="favoriteMovies"></textarea>
-                        </mat-form-field>
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Favorite Games
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                Change information about your favorite games
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <mat-form-field class="long-field" appearance="outline">
-                            <textarea matInput cdkTextareaAutosize formControlName="favoriteGames"></textarea>
-                        </mat-form-field>
-                    </mat-expansion-panel>
-
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                Favorite Quotes
-                            </mat-panel-title>
-                            <mat-panel-description>
-                                Change information about your favorite quotes
-                            </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <mat-form-field class="long-field" appearance="outline">
-                            <input matInput cdkTextareaAutosize formControlName="favoriteQuotes">
-                        </mat-form-field>
-                    </mat-expansion-panel>
-                </mat-accordion>
-            </form>
-            <button (click)="editUserData()" mat-raised-button color="primary" style="margin-top: 10px">Save changes</button>
-        </mat-card-content>
-    </mat-card>
+  <mat-card>
+    <div *ngIf="editForm.dirty" class="alert">
+      <strong>Warning! </strong>You made some changes. Any unsaved changes will
+      be lost!
+    </div>
+    <mat-card-header
+      ><h2>{{ user.name }} {{ user.surname }}</h2>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="editForm" (ngSubmit)="editUserData()">
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Status
+              </mat-panel-title>
+              <mat-panel-description>
+                Change your profile status
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field class="long-field">
+              <input matInput placeholder="Status" formControlName="status" />
+            </mat-form-field>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Date of birth
+              </mat-panel-title>
+              <mat-panel-description>
+                Change your birth date
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field appearance="fill">
+              <mat-label>Choose birthday date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="birthdayDatepicker"
+                formControlName="dateOfBirth"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="birthdayDatepicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #birthdayDatepicker></mat-datepicker>
+            </mat-form-field>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Gender
+              </mat-panel-title>
+              <mat-panel-description>
+                Change your gender
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field>
+              <input matInput placeholder="Gender" formControlName="gender" />
+            </mat-form-field>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                City and Country
+              </mat-panel-title>
+              <mat-panel-description>
+                Change your city and country information
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field style="margin-right: 15px;">
+              <input matInput placeholder="City"  formControlName="city" />
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Country" formControlName="country" />
+            </mat-form-field>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Activities
+              </mat-panel-title>
+              <mat-panel-description>
+                Change information about your activities
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field class="long-field" appearance="outline">
+              <textarea
+                matInput
+                cdkTextareaAutosize
+                formControlName="activities"
+              ></textarea>
+            </mat-form-field>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Favorite Movies
+              </mat-panel-title>
+              <mat-panel-description>
+                Change information about your favorite movies
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field class="long-field" appearance="outline">
+              <textarea
+                matInput
+                cdkTextareaAutosize
+                formControlName="favoriteMovies"
+              ></textarea>
+            </mat-form-field>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Favorite Games
+              </mat-panel-title>
+              <mat-panel-description>
+                Change information about your favorite games
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field class="long-field" appearance="outline">
+              <textarea
+                matInput
+                cdkTextareaAutosize
+                formControlName="favoriteGames"
+              ></textarea>
+            </mat-form-field>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Favorite Quotes
+              </mat-panel-title>
+              <mat-panel-description>
+                Change information about your favorite quotes
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-form-field class="long-field" appearance="outline">
+              <input
+                matInput
+                cdkTextareaAutosize
+                formControlName="favoriteQuotes"
+              />
+            </mat-form-field>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </form>
+      <button
+        (click)="editUserData()"
+        mat-raised-button
+        color="primary"
+        style="margin-top: 10px;"
+      >
+        Save changes
+      </button>
+    </mat-card-content>
+  </mat-card>
 </div>

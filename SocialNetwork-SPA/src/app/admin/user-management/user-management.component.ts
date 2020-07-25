@@ -21,29 +21,28 @@ export class UserManagementComponent implements OnInit {
   constructor(private adminService: AdminService, private alertify: AlertifyService,
               public dialog: MatDialog) { }
 
-  openDialog(user: UserForList) {
+  openRolesEditDialog(user: UserForList) {
     const dialogRef = this.dialog.open(RolesEditDialogComponent, {
       data: user
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      const roles = result.filter(role => role.isChecked).map(r => r.roleName);
-      console.log(roles);
-      this.adminService.changeUserRole(user.id, roles).subscribe(next => {
-        this.alertify.success('Information updated successfully!');
-        user.roles = next as Array<string>;
-      }, error => {
-        this.alertify.error(error);
-      });
+      if (result) {
+        const roles = result.filter(role => role.isChecked).map(r => r.roleName);
+        this.adminService.changeUserRole(user.id, roles).subscribe(next => {
+          this.alertify.success('Information updated successfully!');
+          user.roles = roles;
+        }, error => {
+          this.alertify.error(error);
+        });
+      }
     }, error => {
       this.alertify.error(error);
     });
   }
 
-  openUserDetails(user: UserForList) {
-    const dialogRef = this.dialog.open(UserDetailDialogComponent, {
-      data: user
-    });
+  openUserDetailsDialog(user: UserForList) {
+    this.dialog.open(UserDetailDialogComponent, { data: user });
   }
 
   ngOnInit() {

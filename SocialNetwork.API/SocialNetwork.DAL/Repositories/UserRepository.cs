@@ -23,26 +23,6 @@ namespace SocialNetwork.DAL.Repositories
             return PagedList<User>.CreateAsync(query, queryOptions);
         }
 
-        public Task<User> GetUserById(string id)
-        {
-            return _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-        }
-
-        public void AddUser(User user)
-        {
-            _context.Users.Add(user);
-        }
-
-        public void DeleteUser(User user)
-        {
-            _context.Users.Remove(user);
-        }
-
-        public void UpdateUser(User user)
-        {
-            _context.Update(user);
-        }
-
         public Task<bool> IsUserWithIdExists(string id)
         {
             return _context.Users.AnyAsync(u => u.Id == id);

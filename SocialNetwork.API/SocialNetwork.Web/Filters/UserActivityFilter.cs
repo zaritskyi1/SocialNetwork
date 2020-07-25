@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using SocialNetwork.BLL.Services.Interfaces;
 using SocialNetwork.Web.Extensions;
 
@@ -21,7 +21,7 @@ namespace SocialNetwork.Web.Filters
 
             var userId = context.HttpContext.GetUserId();
 
-            await _userService.UpdateUserActivity(userId);
+            await _userService.UpdateUserActivity(userId, DateTime.Now);
         }
     }
 }

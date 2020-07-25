@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using SocialNetwork.BLL.DTOs.MessageReport;
 using SocialNetwork.BLL.Exceptions;
 using SocialNetwork.BLL.Helpers;
@@ -14,11 +14,13 @@ namespace SocialNetwork.BLL.Services
 {
     public class ReportService : IReportService
     {
+        private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ReportService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ReportService(UserManager<User> userManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _userManager = userManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -32,7 +34,7 @@ namespace SocialNetwork.BLL.Services
                 throw new EntityNotFoundException(typeof(Message), messageId);
             }
 
-            var user = await _unitOfWork.UserRepository.GetUserById(userId);
+            var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null)
             {
@@ -85,13 +87,6 @@ namespace SocialNetwork.BLL.Services
             var reportMessages = await _unitOfWork.MessageReportRepository.GetMessageReports(queryOptions);
 
             var paginationResult = _mapper.Map<PaginationResult<MessageReportForList>>(reportMessages);
-
-            //var paginationResult = new PaginationResult<MessageReportForList>()
-            //{
-            //    Result = messageReportsForList,
-            //    Information = new PaginationInfo(reportMessages.CurrentPage,
-            //        reportMessages.PageSize, reportMessages.TotalCount, reportMessages.TotalPages)
-            //};
 
             return paginationResult;
         }

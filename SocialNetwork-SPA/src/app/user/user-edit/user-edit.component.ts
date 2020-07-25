@@ -24,7 +24,7 @@ export class UserEditComponent implements OnInit {
     });
 
     this.editForm = new FormGroup({
-      birthDate: new FormControl(this.user.dateOfBirth),
+      dateOfBirth: new FormControl(this.user.dateOfBirth),
       gender: new FormControl(this.user.gender),
       city: new FormControl(this.user.city),
       country: new FormControl(this.user.country),

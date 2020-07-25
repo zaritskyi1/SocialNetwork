@@ -37,6 +37,6 @@ export class AdminService {
   }
 
   changeUserRole(id: string, roles: string[]) {
-    return this.http.post(this.baseUrl + 'users/' + id + '/role', { roleNames: roles});
+    return this.http.put(this.baseUrl + 'users/' + id + '/role', { roleNames: roles});
   }
 }

@@ -7,7 +7,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./roles-edit-dialog.component.css']
 })
 export class RolesEditDialogComponent {
-  @Output() changedRoles = new EventEmitter();
   roles = [
     {
       roleName: 'User',
@@ -34,11 +33,6 @@ export class RolesEditDialogComponent {
   }
 
   onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  updateRoles() {
-    this.changedRoles.emit(this.roles);
     this.dialogRef.close();
   }
 }
