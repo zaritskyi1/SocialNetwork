@@ -4,12 +4,20 @@ namespace SocialNetwork.BLL.Exceptions
 {
     public class AccessDeniedException : InvalidOperationException
     {
-        public Type EntityType { get; }
+        private const string DefaultMessage = "You do not have access to {0}.";
 
-        public AccessDeniedException(Type entityType) 
-            : base($"You do not have access to this {entityType.Name}")
+        public string ResourceName { get; }
+
+        public AccessDeniedException(string resourceName) 
+            : base(String.Format(DefaultMessage, resourceName))
         {
-            EntityType = entityType;
+            ResourceName = resourceName;
+        }
+
+        public AccessDeniedException(Type resourceType) 
+            : base(String.Format(DefaultMessage, resourceType.Name))
+        {
+            ResourceName = resourceType.Name;
         }
     }
 }

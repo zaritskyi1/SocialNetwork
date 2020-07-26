@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using Microsoft.AspNetCore.Routing;
 using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Friendship;
 using SocialNetwork.BLL.DTOs.Message;
@@ -12,9 +11,9 @@ using SocialNetwork.DAL.Models;
 
 namespace SocialNetwork.BLL.MappingProfiles
 {
-    public class BLLToDALMapperProfile : Profile
+    public class BusinessToDataProfile : Profile
     {
-        public BLLToDALMapperProfile()
+        public BusinessToDataProfile()
         {
             ConfigureUserMapping();
             ConfigureMessageMapping();
@@ -39,7 +38,7 @@ namespace SocialNetwork.BLL.MappingProfiles
 
         private void ConfigureMessageMapping()
         {
-            CreateMap<MessageForCreation, Message>()
+            CreateMap<MessageForCreationDto, Message>()
                 .ForMember(m => m.CreatedDate, opt => opt.MapFrom(src => DateTime.Now));
         }
 

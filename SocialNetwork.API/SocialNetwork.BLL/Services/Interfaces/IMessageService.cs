@@ -5,7 +5,7 @@ namespace SocialNetwork.BLL.Services.Interfaces
 {
     public interface IMessageService
     {
-        Task<MessageDto> CreateMessage(MessageForCreation messageForCreation);
+        Task<MessageDto> CreateMessage(string userId, MessageForCreationDto messageForCreationDto);
         Task<MessageDto> GetMessage(string userId, string messageId);
         Task DeleteMessage(string userId, string messageId);
     }

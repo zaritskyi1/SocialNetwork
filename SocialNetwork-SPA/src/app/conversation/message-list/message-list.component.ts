@@ -72,7 +72,7 @@ export class MessageListComponent implements OnInit {
     this.messageService.sendMessage(this.messageForSent).subscribe((message: Message) => {
       this.messages.push(message);
     }, error => {
-      console.log(error);
+      this.alertify.error(error);
     });
     this.messageForSent.content = '';
   }

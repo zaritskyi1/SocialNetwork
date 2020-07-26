@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using AutoMapper;
 using SocialNetwork.BLL.DTOs.Friendship;
@@ -45,12 +46,11 @@ namespace SocialNetwork.BLL.Services
             return paginationResult;
         }
 
-        public async Task<FriendshipDto> CreateFriendshipRequest(FriendshipForCreationDto friendshipForCreation)
+        public async Task<FriendshipDto> CreateFriendshipRequest(string userId, FriendshipForCreationDto friendshipForCreation)
         {
-            await ValidateFriendshipForCreation(friendshipForCreation);
+            await ValidateFriendshipForCreation(userId, friendshipForCreation);
 
             var friendship = _mapper.Map<Friendship>(friendshipForCreation);
-
             friendship.Status = FriendshipStatus.Pending;
             friendship.StatusChangedDate = DateTime.Now;
 
@@ -58,7 +58,6 @@ namespace SocialNetwork.BLL.Services
             await _unitOfWork.Commit();
 
             var friendshipDto = _mapper.Map<FriendshipDto>(friendship);
-
             return friendshipDto;
         }
 
@@ -78,7 +77,7 @@ namespace SocialNetwork.BLL.Services
 
             if (friendship.Status != FriendshipStatus.Pending)
             {
-                throw new CreateFriendshipOperationException(friendshipId);
+                throw new AcceptFriendshipOperationException(friendship.Id);
             }
 
             friendship.Status = FriendshipStatus.Accepted;
@@ -97,10 +96,7 @@ namespace SocialNetwork.BLL.Services
                 throw new EntityNotFoundException(typeof(Friendship), friendshipId);
             }
 
-            if (friendship.ReceiverId != userId && friendship.SenderId != userId)
-            {
-                throw new AccessDeniedException(typeof(Friendship));
-            }
+            CheckUserFriendshipAccess(userId, friendship);
 
             var friendshipDto = _mapper.Map<FriendshipDto>(friendship);
 
@@ -109,9 +105,8 @@ namespace SocialNetwork.BLL.Services
 
         public async Task<FriendshipDto> GetFriendshipByUserIds(string currentUserId, string otherUserId)
         {
-            var isUserExists = !await _unitOfWork.UserRepository.IsUserWithIdExists(otherUserId);
-
-            if (isUserExists)
+            var isUserExists = await _unitOfWork.UserRepository.IsUserWithIdExists(otherUserId);
+            if (!isUserExists)
             {
                 throw new EntityNotFoundException(typeof(User), otherUserId);
             }
@@ -121,11 +116,12 @@ namespace SocialNetwork.BLL.Services
 
             if (friendship == null)
             {
-                throw new EntityNotFoundException(typeof(Friendship), currentUserId + otherUserId);
+                throw new EntityNotFoundException("Friendship with users IDs doesn't exist.", typeof(Conversation));
             }
 
-            var friendshipDto = _mapper.Map<FriendshipDto>(friendship);
+            CheckUserFriendshipAccess(currentUserId, friendship);
 
+            var friendshipDto = _mapper.Map<FriendshipDto>(friendship);
             return friendshipDto;
         }
 
@@ -138,10 +134,7 @@ namespace SocialNetwork.BLL.Services
                 throw new EntityNotFoundException(typeof(Friendship), friendshipId);
             }
 
-            if (friendship.ReceiverId != userId && friendship.SenderId != userId)
-            {
-                throw new AccessDeniedException(typeof(Friendship));
-            }
+            CheckUserFriendshipAccess(userId, friendship);
 
             _unitOfWork.FriendshipRepository.DeleteFriendship(friendship);
 
@@ -166,8 +159,13 @@ namespace SocialNetwork.BLL.Services
             return friendshipsForList;
         }
 
-        private async Task ValidateFriendshipForCreation(FriendshipForCreationDto friendshipDto)
+        private async Task ValidateFriendshipForCreation(string userId, FriendshipForCreationDto friendshipDto)
         {
+            if (userId != friendshipDto.SenderId)
+            {
+                throw new InvalidUserIdException(typeof(Friendship));
+            }
+
             var isUserExists = await _unitOfWork.UserRepository.IsUserWithIdExists(friendshipDto.ReceiverId);
 
             if (!isUserExists)
@@ -177,7 +175,7 @@ namespace SocialNetwork.BLL.Services
 
             if (friendshipDto.ReceiverId == friendshipDto.SenderId)
             {
-                throw new CreateFriendshipOperationException(friendshipDto.ReceiverId);
+                throw new ModelValidationException("Can't create Friendship with the same user IDs.");
             }
             
             var friendshipExisting = await _unitOfWork.FriendshipRepository.IsFriendshipExistsBySenderAndReceiverId(
@@ -185,8 +183,15 @@ namespace SocialNetwork.BLL.Services
 
             if (friendshipExisting)
             {
-                // TODO Exception for exist
-                throw new Exception();
+                throw new EntityExistsException(typeof(Friendship));
+            }
+        }
+
+        private static void CheckUserFriendshipAccess(string userId, Friendship friendship)
+        {
+            if (friendship.ReceiverId != userId && friendship.SenderId != userId)
+            {
+                throw new AccessDeniedException(typeof(Friendship));
             }
         }
     }

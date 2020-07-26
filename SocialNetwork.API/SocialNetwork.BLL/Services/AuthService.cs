@@ -36,16 +36,11 @@ namespace SocialNetwork.BLL.Services
         {
             var user = await _userManager.FindByNameAsync(userLoginDto.UserName);
 
-            if (user == null)
-            {
-                return null;
-            }
-
             var result = await _userManager.CheckPasswordAsync(user, userLoginDto.Password);
 
             if (!result)
             {
-                return null;
+                throw new LoginException(typeof(User));
             }
 
             var token = await GenerateUserToken(user);
@@ -59,20 +54,16 @@ namespace SocialNetwork.BLL.Services
 
             var createUserResult  = await _userManager.CreateAsync(user, userForRegisterDto.Password);
 
-            if (createUserResult.Succeeded)
-            {
-                var addRoleToUserResult = await _userManager.AddToRoleAsync(user, "User");
+            if (!createUserResult.Succeeded) 
+                throw new IdentityException(createUserResult.Errors);
 
-                if (addRoleToUserResult.Succeeded)
-                {
-                    var userDto = _mapper.Map<UserDto>(user);
-                    return userDto;
-                }
+            var addRoleToUserResult = await _userManager.AddToRoleAsync(user, "User");
 
+            if (!addRoleToUserResult.Succeeded) 
                 throw new IdentityException(addRoleToUserResult.Errors);
-            }
 
-            throw new IdentityException(createUserResult.Errors);
+            var userDto = _mapper.Map<UserDto>(user);
+            return userDto;
         }
 
         private async Task<string> GenerateUserToken(User user)
@@ -95,12 +86,13 @@ namespace SocialNetwork.BLL.Services
             var algorithm = SecurityAlgorithms.HmacSha256;
 
             var signingCredentials = new SigningCredentials(key, algorithm);
+            var expiresTime = DateTime.Now.AddMinutes(_tokenSettings.AccessTokenExpiration);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = signingCredentials
+                Expires = expiresTime,
+                SigningCredentials = signingCredentials,
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

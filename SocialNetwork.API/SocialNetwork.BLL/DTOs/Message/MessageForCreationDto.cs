@@ -2,7 +2,7 @@
 
 namespace SocialNetwork.BLL.DTOs.Message
 {
-    public class MessageForCreation
+    public class MessageForCreationDto
     {
         [Required]
         [StringLength(512, MinimumLength = 1)]

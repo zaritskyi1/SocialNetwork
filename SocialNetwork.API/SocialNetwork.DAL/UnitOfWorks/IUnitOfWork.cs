@@ -12,6 +12,5 @@ namespace SocialNetwork.DAL.UnitOfWorks
         IParticipantRepository ParticipantRepository { get; }
         IMessageReportRepository MessageReportRepository { get; }
         Task Commit();
-        void RollBack();
     }
 }

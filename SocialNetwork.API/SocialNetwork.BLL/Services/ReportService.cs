@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using SocialNetwork.BLL.DTOs.MessageReport;
 using SocialNetwork.BLL.Exceptions;
 using SocialNetwork.BLL.Helpers;
@@ -14,13 +13,11 @@ namespace SocialNetwork.BLL.Services
 {
     public class ReportService : IReportService
     {
-        private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ReportService(UserManager<User> userManager, IUnitOfWork unitOfWork, IMapper mapper)
+        public ReportService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _userManager = userManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -34,9 +31,8 @@ namespace SocialNetwork.BLL.Services
                 throw new EntityNotFoundException(typeof(Message), messageId);
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null)
+            var userExisting = await _unitOfWork.UserRepository.IsUserWithIdExists(userId);
+            if (!userExisting)
             {
                 throw new EntityNotFoundException(typeof(User), userId);
             }

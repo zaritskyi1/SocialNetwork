@@ -22,16 +22,6 @@ namespace SocialNetwork.DAL.Repositories
             _context.Conversations.Add(conversation);
         }
 
-        public void DeleteConversation(Conversation conversation)
-        {
-            _context.Conversations.Remove(conversation);
-        }
-
-        public void UpdateConversation(Conversation conversation)
-        {
-            _context.Conversations.Update(conversation);
-        }
-
         public Task<bool> IsConversationExistsById(string id)
         {
             return _context.Conversations.AnyAsync(c => c.Id == id);

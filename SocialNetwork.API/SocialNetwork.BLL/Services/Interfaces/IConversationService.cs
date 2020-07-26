@@ -8,7 +8,7 @@ namespace SocialNetwork.BLL.Services.Interfaces
 {
     public interface IConversationService
     {
-        Task<ConversationForListDto> CreateConversation(
+        Task<ConversationForListDto> CreateConversation(string userId,
             ConversationForCreationDto conversationForCreationDto);
         Task<PaginationResult<ConversationForListDto>> GetPaginatedConversationsByUserId(
             string userId, PaginationQuery paginationQuery);

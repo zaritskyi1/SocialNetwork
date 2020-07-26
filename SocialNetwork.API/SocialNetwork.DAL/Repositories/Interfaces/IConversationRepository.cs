@@ -7,8 +7,6 @@ namespace SocialNetwork.DAL.Repositories.Interfaces
     public interface IConversationRepository
     {
         void AddConversation(Conversation conversation);
-        void DeleteConversation(Conversation conversation);
-        void UpdateConversation(Conversation conversation);
         Task<bool> IsConversationExistsById(string id);
         Task<bool> IsConversationExistsByUsersId(string firstUserId, string secondUserId);
         Task<Conversation> GetConversationById(string id);

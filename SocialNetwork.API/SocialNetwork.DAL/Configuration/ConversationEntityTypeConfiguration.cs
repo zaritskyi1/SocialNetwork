@@ -9,10 +9,13 @@ namespace SocialNetwork.DAL.Configuration
         public void Configure(EntityTypeBuilder<Conversation> builder)
         {
             builder.HasKey(c => c.Id);
+
             builder.Property(c => c.Title)
                 .HasMaxLength(40);
+
             builder.Property(c => c.LastMessageDate)
                 .IsRequired();
+
             builder.Property(c => c.CreatedDate)
                 .IsRequired();
         }

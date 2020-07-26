@@ -5,6 +5,9 @@
         private const int MaxPageSize = 50;
         private const int MinPageSize = 10;
 
+        private int _pageSize = 10;
+        private int _pageNumber = 1;
+
         public int PageNumber 
         {
             get
@@ -18,9 +21,6 @@
             }
         }
 
-        private int _pageSize = 10;
-        private int _pageNumber = 1;
-
         public int PageSize
         {
             get
@@ -30,7 +30,7 @@
 
             set
             {
-                _pageSize = (value > MaxPageSize || value < MinPageSize) ? MaxPageSize : value;
+                _pageSize = (value > MaxPageSize || value < MinPageSize) ? MinPageSize : value;
             }
         }
     }

@@ -7,7 +7,7 @@ namespace SocialNetwork.BLL.Services.Interfaces
     public interface IFriendshipService
     {
         Task<PaginationResult<FriendshipForListDto>> GetUserFriends(string userId, PaginationQuery paginationQuery);
-        Task<FriendshipDto> CreateFriendshipRequest(FriendshipForCreationDto friendshipForCreation);
+        Task<FriendshipDto> CreateFriendshipRequest(string userId, FriendshipForCreationDto friendshipForCreation);
         Task AcceptFriendshipRequest(string userId, string friendshipId);
         Task<FriendshipDto> GetFriendshipById(string userId, string friendshipId);
         Task<FriendshipDto> GetFriendshipByUserIds(string currentUserId, string otherUserId);

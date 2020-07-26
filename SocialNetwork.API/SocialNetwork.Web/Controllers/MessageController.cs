@@ -22,16 +22,11 @@ namespace SocialNetwork.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<CreatedAtActionResult> CreateMessage(MessageForCreation messageForCreation)
+        public async Task<CreatedAtActionResult> CreateMessage(MessageForCreationDto messageForCreationDto)
         {
             var userId = HttpContext.GetUserId();
 
-            if (messageForCreation.UserId != userId)
-            {
-                
-            }
-
-            var messageDto = await _messageService.CreateMessage(messageForCreation);
+            var messageDto = await _messageService.CreateMessage(userId, messageForCreationDto);
 
             return CreatedAtAction(nameof(GetMessage), 
                 new { id = messageDto.Id }, messageDto);
@@ -41,6 +36,7 @@ namespace SocialNetwork.Web.Controllers
         public async Task<IActionResult> DeleteMessage(string id)
         {
             var userId = HttpContext.GetUserId();
+
             await _messageService.DeleteMessage(userId, id);
 
             return NoContent();
@@ -50,6 +46,7 @@ namespace SocialNetwork.Web.Controllers
         public async Task<ActionResult<MessageDto>> GetMessage(string id)
         {
             var userId = HttpContext.GetUserId();
+
             var messageDto = await _messageService.GetMessage(userId, id);
 
             return messageDto;

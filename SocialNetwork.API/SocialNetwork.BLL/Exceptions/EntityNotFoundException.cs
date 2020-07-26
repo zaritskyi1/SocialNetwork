@@ -4,14 +4,20 @@ namespace SocialNetwork.BLL.Exceptions
 {
     public class EntityNotFoundException : Exception
     {
-        public Type EntityType { get; }
-        public string EntityId { get; }
+        private const string DefaultMessage = "{0} with id - {1} doesn't exist.";
 
-        public EntityNotFoundException(Type entityType, string entityId) :
-            base($"Entity {entityType.Name} with id {entityId} doesn't exist.")
+        public Type EntityType { get; }
+
+        public EntityNotFoundException(string message, Type entityType) : base(message)
         {
             EntityType = entityType;
-            EntityId = entityId;
         }
+
+        public EntityNotFoundException(Type entityType, string entityId) :
+            base(String.Format(DefaultMessage, entityType.Name, entityId))
+        {
+            EntityType = entityType;
+        }
+
     }
 }

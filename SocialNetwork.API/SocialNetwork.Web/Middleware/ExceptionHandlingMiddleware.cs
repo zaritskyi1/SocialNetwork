@@ -37,7 +37,7 @@ namespace SocialNetwork.Web.Middleware
             var routeData = context.GetRouteData();
             var actionContext = new ActionContext(context, routeData, new ActionDescriptor());
 
-            var problemDetails = CreateProblemDetails(context, ex);
+            var problemDetails = CreateProblemDetails(ex);
 
             var result = new ObjectResult(problemDetails)
             {
@@ -47,42 +47,44 @@ namespace SocialNetwork.Web.Middleware
             return _executor.ExecuteAsync(actionContext, result);
         }
 
-        private ProblemDetails CreateProblemDetails(HttpContext context, Exception ex)
+        private ProblemDetails CreateProblemDetails(Exception ex)
         {
             var problemDetails = new ProblemDetails()
             {
-                Instance = context.Request.Path,
                 Detail = ex.Message
             };
-
-            //problemDetails.Extensions.Add("traceId", context.TraceIdentifier);
 
             switch (ex)
             {
                 case IdentityException e:
-                    problemDetails.Title = "One or more identity errors occured.";
-                    problemDetails.Detail = "Please refer to the errors property for additional details.";
+                    problemDetails.Title = "Identity error occured.";
+                    problemDetails.Detail = "Check errors for details.";
                     problemDetails.Extensions.Add("errors", e.Errors);
                     problemDetails.Status = StatusCodes.Status400BadRequest;
                     break;
                 case EntityNotFoundException _:
-                    problemDetails.Title = "Entity Not found.";
+                    problemDetails.Title = "Entity not found.";
                     problemDetails.Status = StatusCodes.Status404NotFound;
                     break;
-                case EntityAlreadyExistsException _:
-                    problemDetails.Title = "You do not have access to this action.";
-                    problemDetails.Status = StatusCodes.Status303SeeOther;
-                    break;
-                case ModelValidationException e:
-                    problemDetails.Title = "User id does not match current user id.";
+                case EntityExistsException _:
+                    problemDetails.Title = "Entity already exists.";
                     problemDetails.Status = StatusCodes.Status400BadRequest;
                     break;
-                case InvalidOperationException _:
-                    problemDetails.Title = "This operation is invalid.";
+                case ModelValidationException e:
+                    problemDetails.Title = "Model validation failed.";
+                    problemDetails.Status = StatusCodes.Status400BadRequest;
+                    break;
+                case InvalidBusinessOperationException _:
+                    problemDetails.Title = "Invalid Operation.";
+                    problemDetails.Status = StatusCodes.Status400BadRequest;
+                    break;
+                case AccessDeniedException _:
+                    problemDetails.Title = "Access denied.";
                     problemDetails.Status = StatusCodes.Status400BadRequest;
                     break;
                 default:
                     problemDetails.Title = "Internal server error.";
+                    problemDetails.Detail = "Unknown error occurred! Contact system administrator.";
                     problemDetails.Status = StatusCodes.Status500InternalServerError;
                     break;
             }

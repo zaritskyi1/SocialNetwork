@@ -20,13 +20,13 @@ namespace SocialNetwork.BLL.Validators
                 return new ValidationResult($"{validationContext.DisplayName} is required field.");
             }
 
-            if (DateTime.TryParse(value.ToString(), out var date))
+            if (!DateTime.TryParse(value.ToString(), out var date))
             {
-                var result = date.AddYears(_minimumAge) < DateTime.Now;
-                return result? ValidationResult.Success : new ValidationResult("Age must be greater than 18.");
+                return new ValidationResult("Invalid date format.");
             }
 
-            return new ValidationResult("Invalid date format.");
+            var result = date.AddYears(_minimumAge) < DateTime.Now;
+            return result? ValidationResult.Success : new ValidationResult("Age must be greater than 18.");
         }
     }
 }

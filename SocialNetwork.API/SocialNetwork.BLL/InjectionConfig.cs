@@ -25,17 +25,12 @@ namespace SocialNetwork.BLL
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
-                    // Lockout settings.
-                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                    options.Lockout.MaxFailedAccessAttempts = 5;
-                    options.Lockout.AllowedForNewUsers = true;
                 })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<SocialNetworkContext>();
-                //.AddSignInManager<SignInManager<User>>();
 
-            services.AddAutoMapper(typeof(BLLToDALMapperProfile), 
-                typeof(DALToBLLMapperProfile));
+            services.AddAutoMapper(typeof(BusinessToDataProfile),
+                typeof(DataToBusinessProfile));
 
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();

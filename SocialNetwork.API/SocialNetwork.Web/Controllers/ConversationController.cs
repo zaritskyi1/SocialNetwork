@@ -32,12 +32,7 @@ namespace SocialNetwork.Web.Controllers
         {
             var userId = HttpContext.GetUserId();
 
-            if (conversationForCreationDto.FirstUserId != userId)
-            {
-                throw new InvalidUserIdException(nameof(conversationForCreationDto.FirstUserId));
-            }
-
-            var conversation = await _conversationService.CreateConversation(conversationForCreationDto);
+            var conversation = await _conversationService.CreateConversation(userId, conversationForCreationDto);
 
             return CreatedAtAction(nameof(GetConversation), new {id = conversation.Id}, conversation);
         }

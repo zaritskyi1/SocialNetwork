@@ -61,17 +61,6 @@ namespace SocialNetwork.Web.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}/friends")]
-        public async Task<IEnumerable<FriendshipForListDto>> GetUserFriends(string id,
-            [FromQuery]PaginationQuery paginationQuery)
-        {
-            var paginationResult = await _friendshipService.GetUserFriends(id, paginationQuery);
-
-            Response.AddPagination(paginationResult.Information);
-
-            return paginationResult.Result;
-        }
-
         [HttpGet("{id}/friendship-status")]
         public async Task<FriendshipDto> GetUserFriendshipStatus(string id)
         {

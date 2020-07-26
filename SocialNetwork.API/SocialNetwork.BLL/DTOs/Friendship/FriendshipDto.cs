@@ -1,4 +1,6 @@
-﻿namespace SocialNetwork.BLL.DTOs.Friendship
+﻿using System;
+
+namespace SocialNetwork.BLL.DTOs.Friendship
 {
     public class FriendshipDto
     {
@@ -6,5 +8,6 @@
         public string SenderId { get; set; } 
         public string ReceiverId { get; set; } 
         public string Status { get; set; }
+        public DateTime StatusChangedDate { get; set; }
     }
 }

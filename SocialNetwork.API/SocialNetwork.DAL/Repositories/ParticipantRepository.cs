@@ -24,14 +24,6 @@ namespace SocialNetwork.DAL.Repositories
                 p.UserId == userId && p.ConversationId == conversationId);
         }
 
-        public Task<List<Participant>> GetParticipantsByConversationId(string conversationId)
-        {
-            return _context.Participants
-                .Where(p => p.ConversationId == conversationId)
-                .Include(p => p.User)
-                .ToListAsync();
-        }
-
         public Task<PagedList<Participant>> GetPagedParticipantsByConversationId(string conversationId, QueryOptions queryOptions)
         {
             var query = _context.Participants
@@ -40,6 +32,12 @@ namespace SocialNetwork.DAL.Repositories
                 .AsQueryable();
 
             return PagedList<Participant>.CreateAsync(query, queryOptions);
+        }
+
+        public Task<bool> IsParticipantExistsByUserConversationId(string userId, string conversationId)
+        {
+            return _context.Participants.AnyAsync(p =>
+                p.UserId == userId && p.ConversationId == conversationId);
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Message;
@@ -26,11 +23,16 @@ namespace SocialNetwork.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<ConversationForListDto> CreateConversation(ConversationForCreationDto conversationForCreationDto)
+        public async Task<ConversationForListDto> CreateConversation(string userId, ConversationForCreationDto conversationForCreationDto)
         {
+            if (conversationForCreationDto.FirstUserId != userId)
+            {
+                throw new InvalidUserIdException(typeof(Conversation));
+            }
+
             if (conversationForCreationDto.FirstUserId == conversationForCreationDto.SecondUserId)
             {
-                //TODO: EXCEPTION
+                throw new ModelValidationException("Can't create Conversation with the same user IDs.");
             }
 
             var conversationExisting = await _unitOfWork.ConversationRepository.IsConversationExistsByUsersId(
@@ -38,7 +40,7 @@ namespace SocialNetwork.BLL.Services
 
             if (conversationExisting)
             {
-                throw new Exception("Already exists");
+                throw new EntityExistsException(typeof(Conversation));
             }
 
             var conversation = _mapper.Map<ConversationForCreationDto, Conversation>(conversationForCreationDto);
@@ -70,10 +72,7 @@ namespace SocialNetwork.BLL.Services
                 throw new EntityNotFoundException(typeof(Conversation), conversationId);
             }
 
-            if (conversation.Participants.All(p => p.UserId != userId))
-            {
-                throw new AccessDeniedException(typeof(Conversation));
-            }
+            await CheckUserConversationAccess(userId, conversationId);
 
             var queryOptions = _mapper.Map<QueryOptions>(paginationQuery);
             var messages = await _unitOfWork.MessageRepository.GetMessagesByConversationId(conversationId, queryOptions);
@@ -92,10 +91,7 @@ namespace SocialNetwork.BLL.Services
                 throw new EntityNotFoundException(typeof(Conversation), conversationId);
             }
 
-            if (conversation.Participants.All(p => p.UserId != userId))
-            {
-                throw new AccessDeniedException(typeof(Conversation));
-            }
+            await CheckUserConversationAccess(userId, conversationId);
 
             var conversationForList = ConvertToConversationForList(userId, conversation);
 
@@ -105,6 +101,10 @@ namespace SocialNetwork.BLL.Services
         public async Task<ConversationForListDto> GetConversationByUsersId(string firstUserId, string secondUserId)
         {
             var conversation = await _unitOfWork.ConversationRepository.GetConversationByUserIds(firstUserId, secondUserId);
+            if (conversation == null)
+            {
+                throw new EntityNotFoundException("Conversation with users IDs doesn't exist.", typeof(Conversation));
+            }
 
             var conversationForList = _mapper.Map<Conversation, ConversationForListDto>(conversation);
 
@@ -116,12 +116,16 @@ namespace SocialNetwork.BLL.Services
         {
             var queryOptions = _mapper.Map<QueryOptions>(paginationQuery);
 
-            var participants = await _unitOfWork.ParticipantRepository.GetPagedParticipantsByConversationId(conversationId, queryOptions);
-
-            if (participants == null)
+            var conversationExists = await _unitOfWork.ConversationRepository.IsConversationExistsById(conversationId);
+            if (!conversationExists)
             {
-                throw new EntityNotFoundException(typeof(Participant), conversationId);
+                throw new EntityNotFoundException(typeof(Conversation), conversationId);
             }
+
+            await CheckUserConversationAccess(userId, conversationId);
+
+            var participants = await _unitOfWork.ParticipantRepository
+                .GetPagedParticipantsByConversationId(conversationId, queryOptions);
 
             var paginationResult = _mapper.Map<PaginationResult<ParticipantDto>>(participants);
 
@@ -135,8 +139,10 @@ namespace SocialNetwork.BLL.Services
 
             if (participant == null)
             {
-                throw new EntityNotFoundException(typeof(Participant), conversationId + userId);
+                throw new AccessDeniedException(typeof(Conversation));
             }
+
+            await CheckUserConversationAccess(userId, conversationId);
 
             participant.HasUnreadMessages = false;
 
@@ -182,6 +188,17 @@ namespace SocialNetwork.BLL.Services
             }
 
             throw new EntityNotFoundException(typeof(Participant), userId);
+        }
+
+        private async Task CheckUserConversationAccess(string userId, string conversationId)
+        {
+            var participantExists =
+                await _unitOfWork.ParticipantRepository.IsParticipantExistsByUserConversationId(userId, conversationId);
+
+            if (!participantExists)
+            {
+                throw new AccessDeniedException(typeof(Conversation));
+            }
         }
     }
 }

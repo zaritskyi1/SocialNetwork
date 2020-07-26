@@ -74,11 +74,6 @@ namespace SocialNetwork.DAL.UnitOfWorks
             return _context.SaveChangesAsync();
         }
 
-        public void RollBack()
-        {
-            _context?.Dispose();
-        }
-
         public void Dispose()
         {
             _context?.Dispose();

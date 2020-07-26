@@ -11,9 +11,9 @@ using SocialNetwork.DAL.Models;
 
 namespace SocialNetwork.BLL.MappingProfiles
 {
-    public class DALToBLLMapperProfile : Profile
+    public class DataToBusinessProfile : Profile
     {
-        public DALToBLLMapperProfile()
+        public DataToBusinessProfile()
         {
             ConfigureUserMapping();
             ConfigureMessageMapping();

@@ -1,10 +1,12 @@
-﻿namespace SocialNetwork.BLL.Exceptions
+﻿using System;
+
+namespace SocialNetwork.BLL.Exceptions
 {
     public class InvalidUserIdException : ModelValidationException
     {
-        public InvalidUserIdException(string paramName) : 
-            base($"User id does not match.", paramName)
-        {
-        }
+        private const string DefaultMessage = "User id in {0} does not match with current user id.";
+
+        public InvalidUserIdException(Type entityType) : 
+            base(String.Format(DefaultMessage, entityType.Name)) { }
     }
 }

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.BLL.DTOs.Friendship;
-using SocialNetwork.BLL.Exceptions;
 using SocialNetwork.BLL.Helpers;
 using SocialNetwork.BLL.Services.Interfaces;
 using SocialNetwork.Web.Extensions;
@@ -51,17 +50,11 @@ namespace SocialNetwork.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFriendship([FromBody]FriendshipForCreationDto friendshipDto)
         {
-            var id = HttpContext.GetUserId();
+            var userId = HttpContext.GetUserId();
 
-            if (id != friendshipDto.SenderId)
-            {
-                throw new InvalidUserIdException(friendshipDto.SenderId);
-            }
+            var friendship  = await _friendshipService.CreateFriendshipRequest(userId, friendshipDto);
 
-            var friendship  = await _friendshipService.CreateFriendshipRequest(friendshipDto);
-
-            return CreatedAtAction(nameof(GetFriendship), 
-                new { id = friendship.Id }, friendship);
+            return CreatedAtAction(nameof(GetFriendship), new {id = friendship.Id}, friendship);
         }
 
         [HttpGet("{id}")]
