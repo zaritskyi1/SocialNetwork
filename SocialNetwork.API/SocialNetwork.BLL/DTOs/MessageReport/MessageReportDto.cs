@@ -4,7 +4,7 @@ using SocialNetwork.BLL.DTOs.User;
 
 namespace SocialNetwork.BLL.DTOs.MessageReport
 {
-    public class MessageReportForList
+    public class MessageReportDto
     {
         public string Id { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -5,7 +5,8 @@
       <button mat-raised-button color="warn" (click)="removeFriend(friendship.id)">Remove</button>
     </mat-card-actions>
   </mat-card>
-  <mat-paginator [length]="pagination.totalItems"
+  <mat-paginator showFirstLastButtons
+            [length]="pagination.totalItems"
             [pageSize]="pagination.itemsPerPage"
             [pageSizeOptions]="[10, 20, 30, 40, 50]"
             (page)="onPageChange($event)">

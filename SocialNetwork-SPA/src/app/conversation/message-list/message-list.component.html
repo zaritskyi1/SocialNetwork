@@ -23,7 +23,8 @@
         <textarea [(ngModel)]="messageForSent.content" matInput cdkTextareaAutosize placeholder="Enter your message"></textarea>
       </mat-form-field>
       <button class="message-button" mat-flat-button color="primary" (click)="sendMessage()">Send</button>
-    <mat-paginator [length]="pagination.totalItems"
+    <mat-paginator showFirstLastButtons
+              [length]="pagination.totalItems"
               [pageSize]="pagination.itemsPerPage"
               [pageSizeOptions]="[10, 20, 30, 40, 50]"
               (page)="onPageChange($event)">

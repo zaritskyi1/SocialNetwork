@@ -5,33 +5,8 @@
         <mat-card-subtitle>Last active {{ user.lastActive | date:'medium' | timeAgo }}</mat-card-subtitle>
     </mat-card-header>
     <div *ngIf="currentUserId != user.id">
-        <div *ngIf="friendshipWithStatus;else addFriendContent">
-            <button mat-raised-button [matMenuTriggerFor]="menu">Friendship status: {{ friendshipWithStatus?.status }}</button>
-            <mat-menu #menu="matMenu">
-                <button *ngIf="friendshipWithStatus.status == 'Accepted'" mat-menu-item (click)="removeFriend(friendshipWithStatus.id)">
-                  Remove from friendlist
-                </button>
-                <div *ngIf="friendshipWithStatus.status == 'Pending'">
-                    <button *ngIf="currentUserId == friendshipWithStatus.receiverId" mat-menu-item (click)="acceptFriendRequest(friendshipWithStatus.id)">
-                      Accept request
-                    </button>
-                    <button mat-menu-item (click)="declineFriendRequest(friendshipWithStatus.id)">
-                      Decline request
-                    </button>
-                </div>
-            </mat-menu>
-        </div>
-        <ng-template #addFriendContent>
-          <button mat-flat-button color="primary" (click)="addFriend(user.id)">Add friend</button>
-        </ng-template>
-        <div *ngIf="conversation;else createConversationContent">
-          <button mat-flat-button [routerLink]="['/conversations/' + conversation.id]" color="primary">
-            Go to conversation
-          </button>
-        </div>
-        <ng-template #createConversationContent>
-          <button mat-flat-button color="primary" (click)="createConversation()">Create Conversation</button>
-        </ng-template>
+        <app-friendship-actions [userId]="user.id" [currentUserId]="currentUserId"></app-friendship-actions>
+        <app-conversation-actions [userId]="user.id" [currentUserId]="currentUserId"></app-conversation-actions>
     </div>
     <mat-card-content>
       <mat-list>

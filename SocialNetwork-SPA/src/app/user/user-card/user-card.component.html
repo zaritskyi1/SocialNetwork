@@ -7,5 +7,7 @@
 </mat-card-title>
 <mat-card-subtitle>
   Last active: {{user.lastActive | date:'medium' | timeAgo}} <br>
-  {{user.city}}, {{user.country}}
+  <div *ngIf="user.city && user.country">
+    {{user.city}}, {{user.country}}
+  </div>
 </mat-card-subtitle>

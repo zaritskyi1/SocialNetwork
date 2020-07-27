@@ -39,7 +39,7 @@ namespace SocialNetwork.Web.Controllers
                 return BadRequest("Can`t create user!");
             }
 
-            return CreatedAtRoute("GetUser", 
+            return CreatedAtAction("GetUser", 
                 new { controller = "User", id = createdUser.Id }, createdUser);
         }
     }

@@ -9,6 +9,6 @@ namespace SocialNetwork.BLL.Services.Interfaces
         Task CreateMessageReport(string userId, string messageId);
         Task RemoveMessageReport(string messageId);
         Task AcceptMessageReport(string messageId);
-        Task<PaginationResult<MessageReportForList>> GetReportMessages(PaginationQuery paginationQuery);
+        Task<PaginationResult<MessageReportDto>> GetReportMessages(PaginationQuery paginationQuery);
     }
 }

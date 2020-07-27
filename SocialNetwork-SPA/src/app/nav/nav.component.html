@@ -3,6 +3,7 @@
   <div *ngIf="loggedIn()">
     <a mat-flat-button color="primary" [routerLink]="['/conversations']"><mat-icon>email</mat-icon> Conversations</a>
     <a mat-flat-button color="primary" [routerLink]="['/friends']"><mat-icon>people</mat-icon> Friends</a>
+    <a mat-flat-button color="primary" [routerLink]="['/users']"><mat-icon>search</mat-icon> Users</a>
   </div>
   <span class="spacer"></span>
   <div *ngIf="loggedIn()">

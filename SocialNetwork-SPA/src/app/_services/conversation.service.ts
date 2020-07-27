@@ -16,7 +16,7 @@ import { Participant } from '../_models/participant';
 export class ConversationService {
   baseUrl = environment.apiUrl + 'conversations/';
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient) { }
 
   getConversations(page?, itemsPerPage?): Observable<PaginatedResult<Conversation[]>> {
     const paginatedResult: PaginatedResult<Conversation[]> = new PaginatedResult<Conversation[]>();

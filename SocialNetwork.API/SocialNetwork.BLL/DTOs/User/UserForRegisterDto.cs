@@ -7,19 +7,19 @@ namespace SocialNetwork.BLL.DTOs.User
     public class UserForRegisterDto
     {
         [Required]
-        [StringLength(128, MinimumLength = 3)]
+        [StringLength(16, MinimumLength = 3)]
         public string UserName { get; set; }
 
         [Required]
-        [MinLength(4)]
+        [StringLength(20, MinimumLength = 3)]
         public string Password { get; set; }
 
         [Required]
-        [StringLength(128, MinimumLength = 1)]
+        [StringLength(30, MinimumLength = 3)]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(128, MinimumLength = 1)]
+        [StringLength(30, MinimumLength = 3)]
         public string Surname { get; set; }
 
         [Required(AllowEmptyStrings = false)]

@@ -4,7 +4,6 @@ import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { ActivatedRoute } from '@angular/router';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { PageEvent } from '@angular/material/paginator';
-import { AuthService } from 'src/app/_services/auth.service';
 import { ConversationService } from 'src/app/_services/conversation.service';
 
 @Component({
@@ -17,7 +16,7 @@ export class ConversationListComponent implements OnInit {
   pagination: Pagination;
 
   constructor(private route: ActivatedRoute, private conversationService: ConversationService,
-              private alertify: AlertifyService, private authService: AuthService) { }
+              private alertify: AlertifyService) { }
 
   onPageChange(event: PageEvent) {
     this.pagination.currentPage = event.pageIndex + 1;

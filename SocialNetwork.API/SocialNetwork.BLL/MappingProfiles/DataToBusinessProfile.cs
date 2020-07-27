@@ -47,7 +47,7 @@ namespace SocialNetwork.BLL.MappingProfiles
 
         private void ConfigureMessageReportMapping()
         {
-            CreateMap<MessageReport, MessageReportForList>();
+            CreateMap<MessageReport, MessageReportDto>();
         }
 
         private void ConfigureFriendshipMapping()

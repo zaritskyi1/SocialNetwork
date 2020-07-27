@@ -22,9 +22,7 @@ import { UserDetailResolver } from './_resolvers/user-detail.resolver';
 import { FriendListResolver } from './_resolvers/friend-list.resolver';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserEditResolver } from './_resolvers/user-edit.resolver';
-import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changed.guard';
 import { ConversationListResolver } from './_resolvers/conversation-list.resolver';
-import { MessagesResolver } from './_resolvers/messages.resolver';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { MessageManagementComponent } from './admin/message-management/message-management.component';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
@@ -39,6 +37,10 @@ import { FriendshipRequestListComponent } from './friend/friendship-request-list
 import { ConversationDetailResolver } from './_resolvers/conversaton-detail.resolver';
 import { UserCardComponent } from './user/user-card/user-card.component';
 import { TimeAgoExtendsPipe } from './_pipes/time-ago-extends.pipe';
+import { FriendshipActionsComponent } from './user/friendship-actions/friendship-actions.component';
+import { ConversationActionsComponent } from './user/conversation-actions/conversation-actions.component';
+import { UserListResolver } from './_resolvers/user-list.resolver';
+import { UserListComponent } from './user/user-list/user-list.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -66,6 +68,9 @@ export function tokenGetter() {
       FriendshipInfoComponent,
       FriendshipRequestListComponent,
       UserCardComponent,
+      FriendshipActionsComponent,
+      ConversationActionsComponent,
+      UserListComponent,
       TimeAgoExtendsPipe
    ],
    imports: [
@@ -92,8 +97,7 @@ export function tokenGetter() {
       UserEditResolver,
       ConversationListResolver,
       ConversationDetailResolver,
-      MessagesResolver,
-      PreventUnsavedChanges
+      UserListResolver
    ],
    bootstrap: [
       AppComponent

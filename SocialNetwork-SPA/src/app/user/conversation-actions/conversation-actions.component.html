@@ -1,0 +1,8 @@
+<div *ngIf="conversation;else createConversationContent">
+  <button mat-flat-button [routerLink]="['/conversations/' + conversation.id]" color="primary">
+    Go to conversation
+  </button>
+</div>
+<ng-template #createConversationContent>
+  <button mat-flat-button color="primary" (click)="createConversation()">Create Conversation</button>
+</ng-template>

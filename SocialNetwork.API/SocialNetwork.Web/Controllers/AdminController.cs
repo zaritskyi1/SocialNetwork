@@ -11,6 +11,7 @@ using SocialNetwork.Web.Extensions;
 namespace SocialNetwork.Web.Controllers
 {
     [ApiController]
+    [Authorize(Policy = "RequireAdminRole")]
     [Route("api/admin/")]
     public class AdminController : ControllerBase
     {
@@ -21,7 +22,6 @@ namespace SocialNetwork.Web.Controllers
             _adminService = adminService;
         }
 
-        [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("users")]
         public async Task<IEnumerable<UserWithRoleDto>> GetUsersWithRoles([FromQuery]PaginationQuery paginationQuery)
         {
@@ -32,7 +32,6 @@ namespace SocialNetwork.Web.Controllers
             return paginationResult.Result;
         }
 
-        [Authorize(Policy = "RequireAdminRole")]
         [HttpPut("users/{id}/role")]
         public async Task<IActionResult> UpdateUserRole(string id, RoleEditDto editDto)
         {

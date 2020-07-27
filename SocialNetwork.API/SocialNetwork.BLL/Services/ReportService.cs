@@ -76,13 +76,13 @@ namespace SocialNetwork.BLL.Services
             await _unitOfWork.Commit();
         }
 
-        public async Task<PaginationResult<MessageReportForList>> GetReportMessages(PaginationQuery paginationQuery)
+        public async Task<PaginationResult<MessageReportDto>> GetReportMessages(PaginationQuery paginationQuery)
         {
             var queryOptions = _mapper.Map<QueryOptions>(paginationQuery);
 
             var reportMessages = await _unitOfWork.MessageReportRepository.GetMessageReports(queryOptions);
 
-            var paginationResult = _mapper.Map<PaginationResult<MessageReportForList>>(reportMessages);
+            var paginationResult = _mapper.Map<PaginationResult<MessageReportDto>>(reportMessages);
 
             return paginationResult;
         }

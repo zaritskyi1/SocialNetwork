@@ -12,7 +12,7 @@ export class AuthService {
   jwtHelper = new JwtHelperService();
   decodedToken: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   login(model: any) {
     return this.http.post(this.baseUrl + 'login', model)
@@ -39,6 +39,10 @@ export class AuthService {
   hasRoles(roles: Array<string>): boolean {
     let hasRole = false;
     const userRoles = this.decodedToken.role as Array<string>;
+
+    if (!userRoles) {
+      return false;
+    }
 
     roles.forEach(role => {
       if (userRoles.includes(role)) {

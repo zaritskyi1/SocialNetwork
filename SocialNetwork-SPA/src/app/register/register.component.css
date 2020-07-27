@@ -1,6 +1,15 @@
 .main-div mat-card{
     padding: 0px;
 }
+
 .register-form{
     padding: 20px;
+}
+
+mat-form-field {
+    padding-bottom: 5px;
+}
+
+.sign-button {
+    margin-top: 9px;
 }

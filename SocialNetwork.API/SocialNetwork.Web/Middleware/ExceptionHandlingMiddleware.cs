@@ -70,7 +70,7 @@ namespace SocialNetwork.Web.Middleware
                     problemDetails.Title = "Entity already exists.";
                     problemDetails.Status = StatusCodes.Status400BadRequest;
                     break;
-                case ModelValidationException e:
+                case ModelValidationException _:
                     problemDetails.Title = "Model validation failed.";
                     problemDetails.Status = StatusCodes.Status400BadRequest;
                     break;

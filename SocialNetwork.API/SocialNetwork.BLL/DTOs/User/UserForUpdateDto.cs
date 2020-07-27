@@ -9,14 +9,14 @@ namespace SocialNetwork.BLL.DTOs.User
         [StringLength(32)]
         public string Gender { get; set; }
 
-        [StringLength(128)]
+        [StringLength(32)]
         public string City { get; set; }
 
-        [StringLength(128)]
+        [StringLength(32)]
         public string Country { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [DataType(DataType.Date)]
+        ///[DataType(DataType.Date)]
         [MinimumAge(18)]
         public DateTime DateOfBirth { get; set; }
 

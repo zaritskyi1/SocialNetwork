@@ -36,7 +36,7 @@ namespace SocialNetwork.Web.Controllers
 
         [Authorize(Policy = "RequireAdminModeratorRole")]
         [HttpGet("messages")]
-        public async Task<IEnumerable<MessageReportForList>> GetReportedMessages([FromQuery]PaginationQuery paginationQuery)
+        public async Task<IEnumerable<MessageReportDto>> GetReportedMessages([FromQuery]PaginationQuery paginationQuery)
         {
             var paginationResult = await _reportService.GetReportMessages(paginationQuery);
 
