@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { FriendshipWithUser } from '../_models/friendship-with-user';
-import { PaginatedResult } from '../_models/pagination';
+import { PaginatedResult } from '../_models/paginated-result';
 import { map } from 'rxjs/operators';
 import { FriendshipRequest } from '../_models/friendship-request';
 import { FriendshipWithStatus } from '../_models/friendship-with-status';
@@ -71,4 +71,5 @@ export class FriendService {
   removeFriendship(id: string) {
     return this.http.delete(this.baseUrl + id);
   }
+
 }

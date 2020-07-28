@@ -8,18 +8,20 @@ import { AlertifyService } from '../_services/alertify.service';
 })
 export class AuthGuard implements CanActivate {
   constructor(
-    private authService: AuthService, private router: Router,
-    private alertify: AlertifyService) { }
+    private authService: AuthService,
+    private router: Router,
+    private alertify: AlertifyService
+  ) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    const roles = route.firstChild.data.roles as Array<string>;
+    const roles = route.data?.roles as Array<string>;
 
     if (roles) {
       const permission = this.authService.hasRoles(roles);
       if (permission) {
         return true;
       } else {
-        this.router.navigate(['friends']);
+        this.router.navigate(['home']);
         this.alertify.error('You don`t have permission to access this resource!');
       }
     }
@@ -32,4 +34,5 @@ export class AuthGuard implements CanActivate {
     this.router.navigate(['/login']);
     return false;
   }
+
 }

@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UserForList } from '../_models/userForList';
+import { UserForList } from '../_models/user-for-list';
 import { User } from '../_models/user';
 import { FriendshipWithStatus } from '../_models/friendship-with-status';
 import { Conversation } from '../_models/conversation';
-import { PaginatedResult } from '../_models/pagination';
+import { PaginatedResult } from '../_models/paginated-result';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -54,4 +54,5 @@ export class UserService {
   getConversation(id: string): Observable<Conversation> {
     return this.http.get<Conversation>(this.baseUrl + id + '/conversation');
   }
+
 }

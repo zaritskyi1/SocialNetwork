@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { FriendshipWithUser } from '../_models/friendship-with-user';
 import { FriendService } from '../_services/friend.service';
-import { UserForList } from '../_models/userForList';
+import { UserForList } from '../_models/user-for-list';
 import { UserService } from '../_services/user.service';
 
 @Injectable()
@@ -13,8 +13,11 @@ export class UserListResolver implements Resolve<UserForList[]> {
     pageNumber = 1;
     pageSize = 10;
 
-    constructor(private userService: UserService, private router: Router,
-                private alertify: AlertifyService) { }
+    constructor(
+        private userService: UserService,
+        private router: Router,
+        private alertify: AlertifyService
+    ) { }
 
     resolve(route: ActivatedRouteSnapshot): Observable<UserForList[]> {
         return this.userService.getUsers(this.pageNumber, this.pageSize).pipe(

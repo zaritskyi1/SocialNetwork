@@ -1,6 +1,6 @@
-import { UserForList } from './userForList';
+import { UserForList } from './user-for-list';
 
-export class Participant {
+export interface Participant {
     hasUnreadMessages: boolean;
     userId: string;
     user: UserForList;

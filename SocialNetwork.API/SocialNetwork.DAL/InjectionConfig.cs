@@ -11,7 +11,9 @@ namespace SocialNetwork.DAL
         public static void ConfigureDalServices(this IServiceCollection services, IConfiguration configuration)
         {
             string connectionString = configuration["ConnectionStrings:DefaultConnection"];
-            services.AddDbContext<SocialNetworkContext>(options => options.UseSqlServer(connectionString));
+
+            services.AddDbContext<SocialNetworkContext>(options => options.UseSqlServer(connectionString),
+                ServiceLifetime.Transient);
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }

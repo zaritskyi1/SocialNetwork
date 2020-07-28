@@ -14,8 +14,11 @@ export class ConversationDetailComponent implements OnInit {
   conversation: Conversation;
   participants: Participant[];
 
-  constructor(private route: ActivatedRoute, private conversationService: ConversationService,
-              private alertify: AlertifyService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private conversationService: ConversationService,
+    private alertify: AlertifyService
+  ) { }
 
   ngOnInit() {
     this.route.data.subscribe(
@@ -36,4 +39,5 @@ export class ConversationDetailComponent implements OnInit {
       }
     );
   }
+
 }

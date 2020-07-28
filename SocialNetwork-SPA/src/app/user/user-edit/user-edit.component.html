@@ -21,6 +21,9 @@
             </mat-expansion-panel-header>
             <mat-form-field class="long-field">
               <input matInput placeholder="Status" formControlName="status" />
+              <mat-error *ngIf="editForm.get('status').hasError('maxlength')">
+                Status can be max 256 characters long.
+              </mat-error>
             </mat-form-field>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -44,6 +47,12 @@
                 [for]="birthdayDatepicker"
               ></mat-datepicker-toggle>
               <mat-datepicker #birthdayDatepicker></mat-datepicker>
+              <mat-error *ngIf="editForm.get('dateOfBirth').hasError('required')">
+                Birthday date is required.
+              </mat-error>
+              <mat-error *ngIf="editForm.get('dateOfBirth').hasError('ageValidator')">
+                Your age must me greater than {{editForm.get('dateOfBirth').getError('ageValue')}}.
+              </mat-error>
             </mat-form-field>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -57,6 +66,9 @@
             </mat-expansion-panel-header>
             <mat-form-field>
               <input matInput placeholder="Gender" formControlName="gender" />
+              <mat-error *ngIf="editForm.get('gender').hasError('maxlength')">
+                Gender can be max 32 characters long.
+              </mat-error>
             </mat-form-field>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -70,9 +82,15 @@
             </mat-expansion-panel-header>
             <mat-form-field style="margin-right: 15px;">
               <input matInput placeholder="City"  formControlName="city" />
+              <mat-error *ngIf="editForm.get('city').hasError('maxlength')">
+                City can be max 32 characters long.
+              </mat-error>
             </mat-form-field>
             <mat-form-field>
               <input matInput placeholder="Country" formControlName="country" />
+              <mat-error *ngIf="editForm.get('country').hasError('maxlength')">
+                Country can be max 32 characters long.
+              </mat-error>
             </mat-form-field>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -90,6 +108,9 @@
                 cdkTextareaAutosize
                 formControlName="activities"
               ></textarea>
+              <mat-error *ngIf="editForm.get('activities').hasError('maxlength')">
+                Activities can be max 256 characters long.
+              </mat-error>
             </mat-form-field>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -107,6 +128,9 @@
                 cdkTextareaAutosize
                 formControlName="favoriteMovies"
               ></textarea>
+              <mat-error *ngIf="editForm.get('favoriteMovies').hasError('maxlength')">
+                Favorite Movies can be max 256 characters long.
+              </mat-error>
             </mat-form-field>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -124,6 +148,9 @@
                 cdkTextareaAutosize
                 formControlName="favoriteGames"
               ></textarea>
+              <mat-error *ngIf="editForm.get('favoriteGames').hasError('maxlength')">
+                Favorite Games can be max 256 characters long.
+              </mat-error>
             </mat-form-field>
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -141,6 +168,9 @@
                 cdkTextareaAutosize
                 formControlName="favoriteQuotes"
               />
+              <mat-error *ngIf="editForm.get('favoriteQuotes').hasError('maxlength')">
+                Favorite Quotes can be max 256 characters long.
+              </mat-error>
             </mat-form-field>
           </mat-expansion-panel>
         </mat-accordion>

@@ -1,4 +1,4 @@
-import { UserForList } from './userForList';
+import { UserForList } from './user-for-list';
 
 export interface FriendshipWithUser {
     id: string;

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Conversation } from '../_models/conversation';
-import { PaginatedResult } from '../_models/pagination';
+import { PaginatedResult } from '../_models/paginated-result';
 import { Observable } from 'rxjs';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { AuthService } from './auth.service';
 import { Message } from '../_models/message';
 import { ConversationForCreate } from '../_models/conversation-for-create';
 import { Participant } from '../_models/participant';
@@ -29,15 +28,15 @@ export class ConversationService {
     }
 
     return this.http.get<Conversation[]>(this.baseUrl, { observe: 'response', params })
-    .pipe(
-      map(response => {
-        paginatedResult.result = response.body;
-        if (response.headers.get('Pagination') != null) {
-          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-        }
-        return paginatedResult;
-      })
-    );
+      .pipe(
+        map(response => {
+          paginatedResult.result = response.body;
+          if (response.headers.get('Pagination') != null) {
+            paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+          }
+          return paginatedResult;
+        })
+      );
   }
 
   getConversationMessages(id, page?, itemsPerPage?): Observable<PaginatedResult<Message[]>> {
@@ -51,15 +50,15 @@ export class ConversationService {
     }
 
     return this.http.get<Message[]>(this.baseUrl + id + '/messages', { observe: 'response', params })
-    .pipe(
-      map(response => {
-        paginatedResult.result = response.body;
-        if (response.headers.get('Pagination') != null) {
-          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-        }
-        return paginatedResult;
-      })
-    );
+      .pipe(
+        map(response => {
+          paginatedResult.result = response.body;
+          if (response.headers.get('Pagination') != null) {
+            paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+          }
+          return paginatedResult;
+        })
+      );
   }
 
   getConversation(id: string): Observable<Conversation> {
@@ -86,12 +85,13 @@ export class ConversationService {
 
     return this.http.get<Participant[]>(this.baseUrl + id + '/participants', { observe: 'response', params }).pipe(
       map(response => {
-          paginatedResult.result = response.body;
-          if (response.headers.get('Pagination') != null) {
-            paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-          }
-          return paginatedResult;
-        })
+        paginatedResult.result = response.body;
+        if (response.headers.get('Pagination') != null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+        }
+        return paginatedResult;
+      })
     );
   }
+
 }

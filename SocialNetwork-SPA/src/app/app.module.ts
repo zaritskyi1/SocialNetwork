@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Pipe } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './_services/auth.service';
-import { ErrorInterceptorProvider } from './_services/error.interceptor';
+import { ErrorInterceptorProvider } from './_interceptors/error.interceptor';
 import { FriendListComponent } from './friend/friend-list/friend-list.component';
 import { appRoutes } from './routes';
 import { UserDetailComponent } from './user/user-detail/user-detail.component';
@@ -30,21 +30,19 @@ import { RolesEditDialogComponent } from './admin/roles-edit-dialog/roles-edit-d
 import { MessageDetailDialogComponent } from './admin/message-detail-dialog/message-detail-dialog.component';
 import { UserDetailDialogComponent } from './admin/user-detail-dialog/user-detail-dialog.component';
 import { ConversationListComponent } from './conversation/conversation-list/conversation-list.component';
-import { MessageListComponent } from './conversation/message-list/message-list.component';
+import { MessageListComponent } from './message/message-list/message-list.component';
 import { ConversationDetailComponent } from './conversation/conversation-detail/conversation-detail.component';
 import { FriendshipInfoComponent } from './friend/friendship-info/friendship-info.component';
 import { FriendshipRequestListComponent } from './friend/friendship-request-list/friendship-request-list.component';
 import { ConversationDetailResolver } from './_resolvers/conversaton-detail.resolver';
 import { UserCardComponent } from './user/user-card/user-card.component';
 import { TimeAgoExtendsPipe } from './_pipes/time-ago-extends.pipe';
-import { FriendshipActionsComponent } from './user/friendship-actions/friendship-actions.component';
-import { ConversationActionsComponent } from './user/conversation-actions/conversation-actions.component';
+import { FriendshipActionsComponent } from './friend/friendship-actions/friendship-actions.component';
+import { ConversationActionsComponent } from './conversation/conversation-actions/conversation-actions.component';
 import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserListComponent } from './user/user-list/user-list.component';
-
-export function tokenGetter() {
-   return localStorage.getItem('token');
-}
+import { MessageFormComponent } from './message/message-form/message-form.component';
+import { jwtConfig } from './jwt-config';
 
 @NgModule({
    declarations: [
@@ -71,6 +69,7 @@ export function tokenGetter() {
       FriendshipActionsComponent,
       ConversationActionsComponent,
       UserListComponent,
+      MessageFormComponent,
       TimeAgoExtendsPipe
    ],
    imports: [
@@ -82,11 +81,7 @@ export function tokenGetter() {
       HttpClientModule,
       RouterModule.forRoot(appRoutes),
       JwtModule.forRoot({
-         config: {
-            tokenGetter,
-            whitelistedDomains: ['localhost:5000'],
-            blacklistedRoutes: ['localhost:5000/api/auth', 'localhost:5000/api/register'],
-         }
+         config: jwtConfig
       })
    ],
    providers: [

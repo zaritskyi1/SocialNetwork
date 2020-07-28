@@ -52,7 +52,7 @@ namespace SocialNetwork.BLL.Services
 
             var friendship = _mapper.Map<Friendship>(friendshipForCreation);
             friendship.Status = FriendshipStatus.Pending;
-            friendship.StatusChangedDate = DateTime.Now;
+            friendship.StatusChangedDate = DateTime.UtcNow;
 
             _unitOfWork.FriendshipRepository.AddFriendship(friendship);
             await _unitOfWork.Commit();
@@ -81,7 +81,7 @@ namespace SocialNetwork.BLL.Services
             }
 
             friendship.Status = FriendshipStatus.Accepted;
-            friendship.StatusChangedDate = DateTime.Now;
+            friendship.StatusChangedDate = DateTime.UtcNow;
 
             await _unitOfWork.Commit();
         }

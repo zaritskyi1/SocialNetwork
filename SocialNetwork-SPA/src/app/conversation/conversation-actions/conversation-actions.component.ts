@@ -3,6 +3,7 @@ import { Conversation } from 'src/app/_models/conversation';
 import { UserService } from 'src/app/_services/user.service';
 import { ConversationService } from 'src/app/_services/conversation.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { ConversationForCreate } from 'src/app/_models/conversation-for-create';
 
 @Component({
   selector: 'app-conversation-actions',
@@ -14,8 +15,11 @@ export class ConversationActionsComponent implements OnInit {
   @Input() userId: string;
   @Input() currentUserId: string;
 
-  constructor(private userService: UserService, private conversationService: ConversationService,
-              private alertify: AlertifyService) { }
+  constructor(
+    private userService: UserService,
+    private conversationService: ConversationService,
+    private alertify: AlertifyService
+  ) { }
 
   ngOnInit() {
     this.loadConversation();
@@ -32,7 +36,7 @@ export class ConversationActionsComponent implements OnInit {
   }
 
   createConversation() {
-    const conversation = {
+    const conversation: ConversationForCreate = {
       firstUserId: this.currentUserId,
       secondUserId: this.userId
     };

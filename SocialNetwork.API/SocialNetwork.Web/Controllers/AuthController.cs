@@ -23,10 +23,7 @@ namespace SocialNetwork.Web.Controllers
         {
             var token = await _authService.LogIn(userForLoginDto);
 
-            return Ok(new
-            {
-                token
-            });
+            return Ok(new { token });
         }
 
         [HttpPost("register")]
@@ -39,7 +36,7 @@ namespace SocialNetwork.Web.Controllers
                 return BadRequest("Can`t create user!");
             }
 
-            return CreatedAtAction("GetUser", 
+            return CreatedAtAction("GetUser",
                 new { controller = "User", id = createdUser.Id }, createdUser);
         }
     }

@@ -1,0 +1,4 @@
+<mat-form-field class="message-field">
+  <textarea [(ngModel)]="messageForSent.content" matInput cdkTextareaAutosize placeholder="Enter your message"></textarea>
+</mat-form-field>
+<button class="message-button" mat-flat-button color="primary" (click)="sendMessage()">Send</button>

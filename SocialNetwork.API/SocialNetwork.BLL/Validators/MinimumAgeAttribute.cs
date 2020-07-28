@@ -25,7 +25,7 @@ namespace SocialNetwork.BLL.Validators
                 return new ValidationResult("Invalid date format.");
             }
 
-            var result = date.AddYears(_minimumAge) < DateTime.Now;
+            var result = date.AddYears(_minimumAge) < DateTime.UtcNow;
             return result? ValidationResult.Success : new ValidationResult("Age must be greater than 18.");
         }
     }

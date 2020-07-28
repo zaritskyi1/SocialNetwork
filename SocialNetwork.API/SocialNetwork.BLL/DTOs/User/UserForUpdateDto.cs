@@ -16,7 +16,7 @@ namespace SocialNetwork.BLL.DTOs.User
         public string Country { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        ///[DataType(DataType.Date)]
+        [DataType(DataType.Date)]
         [MinimumAge(18)]
         public DateTime DateOfBirth { get; set; }
 

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Message;
 using SocialNetwork.BLL.DTOs.Participant;
-using SocialNetwork.BLL.Exceptions;
 using SocialNetwork.BLL.Helpers;
 using SocialNetwork.BLL.Services.Interfaces;
 using SocialNetwork.Web.Extensions;
@@ -15,7 +13,6 @@ using SocialNetwork.Web.Filters;
 namespace SocialNetwork.Web.Controllers
 {
     [Authorize]
-    [ServiceFilter(typeof(UserActivityActionFilter))]
     [Route("api/conversations")]
     [ApiController]
     public class ConversationController : ControllerBase

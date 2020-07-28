@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.BLL.DTOs.Conversation;
 using SocialNetwork.BLL.DTOs.Friendship;
@@ -12,7 +11,6 @@ using SocialNetwork.Web.Filters;
 
 namespace SocialNetwork.Web.Controllers
 {
-    [Authorize]
     [ServiceFilter(typeof(UserActivityActionFilter))]
     [Route("api/users")]
     [ApiController]
@@ -51,11 +49,6 @@ namespace SocialNetwork.Web.Controllers
         public async Task<IActionResult> UpdateUserInformation(string id,
             [FromBody] UserForUpdateDto userForUpdate)
         {
-            if (id != HttpContext.GetUserId())
-            {
-                BadRequest();
-            }
-
             await _userService.UpdateUserInformation(id, userForUpdate);
 
             return NoContent();

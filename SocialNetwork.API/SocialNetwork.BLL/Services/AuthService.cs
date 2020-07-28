@@ -86,7 +86,7 @@ namespace SocialNetwork.BLL.Services
             var algorithm = SecurityAlgorithms.HmacSha256;
 
             var signingCredentials = new SigningCredentials(key, algorithm);
-            var expiresTime = DateTime.Now.AddMinutes(_tokenSettings.AccessTokenExpiration);
+            var expiresTime = DateTime.UtcNow.AddMinutes(_tokenSettings.AccessTokenExpiration);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

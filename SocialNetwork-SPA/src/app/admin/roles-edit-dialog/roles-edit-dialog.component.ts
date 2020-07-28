@@ -22,9 +22,10 @@ export class RolesEditDialogComponent {
     },
   ];
 
-  constructor(public dialogRef: MatDialogRef<RolesEditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any)
-  {
+  constructor(
+    public dialogRef: MatDialogRef<RolesEditDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.roles.forEach(role => {
       if ((data.roles as Array<string>).includes(role.roleName)) {
         role.isChecked = true;
@@ -35,4 +36,5 @@ export class RolesEditDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
 }

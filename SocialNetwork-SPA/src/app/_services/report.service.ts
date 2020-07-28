@@ -3,8 +3,8 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AlertifyService } from './alertify.service';
 import { map } from 'rxjs/operators';
-import { MessageReport } from '../_models/messageReport';
-import { PaginatedResult } from '../_models/pagination';
+import { MessageReport } from '../_models/message-report';
+import { PaginatedResult } from '../_models/paginated-result';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 export class ReportService {
   baseUrl = environment.apiUrl + 'report/';
 
-  constructor(private http: HttpClient, private alertify: AlertifyService) { }
+  constructor(private http: HttpClient) { }
 
   getReportedMessages(pageNumber?, pageSize?): Observable<PaginatedResult<MessageReport[]>> {
     const paginatedResult: PaginatedResult<MessageReport[]> = new PaginatedResult<MessageReport[]>();
@@ -47,4 +47,5 @@ export class ReportService {
   acceptMessagedreport(id: string) {
     return this.http.delete(this.baseUrl + 'messages/' + id + '/accept');
   }
+
 }

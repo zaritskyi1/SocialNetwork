@@ -65,9 +65,9 @@ namespace SocialNetwork.BLL.Services
 
         public async Task<PaginationResult<MessageDto>> GetConversationMessages(string userId, string conversationId, PaginationQuery paginationQuery)
         {
-            var conversation = await _unitOfWork.ConversationRepository.GetConversationById(conversationId);
+            var conversationExisting = await _unitOfWork.ConversationRepository.IsConversationExistsById(conversationId);
 
-            if (conversation == null)
+            if (!conversationExisting)
             {
                 throw new EntityNotFoundException(typeof(Conversation), conversationId);
             }
@@ -183,11 +183,14 @@ namespace SocialNetwork.BLL.Services
                 if (participant.UserId != userId)
                 {
                     conversationForList.Title = participant.User.Name + " " + participant.User.Surname;
-                    return conversationForList;
+                }
+                else
+                {
+                    conversationForList.IsUnread = participant.HasUnreadMessages;
                 }
             }
 
-            throw new EntityNotFoundException(typeof(Participant), userId);
+            return conversationForList;
         }
 
         private async Task CheckUserConversationAccess(string userId, string conversationId)

@@ -39,7 +39,7 @@ namespace SocialNetwork.BLL.Services
 
             var messageReport = new MessageReport()
             {
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 MessageId = messageId,
                 UserId = userId
             };

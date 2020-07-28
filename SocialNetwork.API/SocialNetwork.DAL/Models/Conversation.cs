@@ -16,8 +16,8 @@ namespace SocialNetwork.DAL.Models
         public Conversation()
         {
             Id = Guid.NewGuid().ToString();
-            LastMessageDate = DateTime.Now;
-            CreatedDate = DateTime.Now;
+            LastMessageDate = DateTime.UtcNow;
+            CreatedDate = DateTime.UtcNow;
         }
     }
 }

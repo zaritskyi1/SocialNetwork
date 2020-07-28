@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportService } from 'src/app/_services/report.service';
-import { MessageReport } from 'src/app/_models/messageReport';
+import { MessageReport } from 'src/app/_models/message-report';
 import { Pagination } from 'src/app/_models/pagination';
 import { PageEvent } from '@angular/material/paginator';
 import { AlertifyService } from 'src/app/_services/alertify.service';
@@ -18,17 +18,14 @@ export class MessageManagementComponent implements OnInit {
   pagination: Pagination;
   displayedColumns = ['createdDate', 'sendBy', 'messageDetail', 'buttons'];
 
-  constructor(private reportService: ReportService, private alertify: AlertifyService,
-              public dialog: MatDialog) { }
+  constructor(
+    private reportService: ReportService,
+    private alertify: AlertifyService,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
-    this.pagination = {
-      currentPage: 1,
-      itemsPerPage: 10,
-      totalItems: 10,
-      totalPages: 1,
-    };
-
+    this.initPagination();
     this.loadMessageReports();
   }
 
@@ -70,8 +67,18 @@ export class MessageManagementComponent implements OnInit {
   }
 
   openMessageDetail(message: Message) {
-    const dialogRef = this.dialog.open(MessageDetailDialogComponent, {
+    this.dialog.open(MessageDetailDialogComponent, {
       data: message
     });
   }
+
+  initPagination() {
+    this.pagination = {
+      currentPage: 1,
+      itemsPerPage: 10,
+      totalItems: 10,
+      totalPages: 1,
+    };
+  }
+
 }

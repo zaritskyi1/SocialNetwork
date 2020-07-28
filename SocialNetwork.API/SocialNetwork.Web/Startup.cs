@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SocialNetwork.BLL;
 using SocialNetwork.BLL.Services.Interfaces;
+using SocialNetwork.Web.Converters;
 using SocialNetwork.Web.Filters;
 using SocialNetwork.Web.Middleware;
 
@@ -22,13 +23,17 @@ namespace SocialNetwork.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureBllServices(Configuration);
-            services.AddControllers();
+
+            services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+            });
 
             services.AddCors();
 
-            services.AddScoped<UserActivityActionFilter>();
+            services.AddTransient<UserActivityActionFilter>();
 
             ConfigureAuthentication(services);
+
             ConfigureAuthorization(services);
         }
 
@@ -46,7 +51,7 @@ namespace SocialNetwork.Web
             seedingDataService.SeedData();
 
             app.UseCors(x => x
-                .WithOrigins("http://localhost:4200")
+                .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
             
@@ -57,7 +62,7 @@ namespace SocialNetwork.Web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute().RequireAuthorization();
+                endpoints.MapControllers().RequireAuthorization();
             });
         }
     }

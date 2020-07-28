@@ -22,7 +22,7 @@ namespace SocialNetwork.BLL.Services
 
         public async Task<MessageDto> CreateMessage(string userId, MessageForCreationDto messageForCreationDto)
         {
-            ValidateMessageForCreation(userId, messageForCreationDto);
+            await ValidateMessageForCreation(userId, messageForCreationDto);
 
             var message = _mapper.Map<Message>(messageForCreationDto);
             _unitOfWork.MessageRepository.AddMessage(message);
@@ -58,7 +58,7 @@ namespace SocialNetwork.BLL.Services
             await _unitOfWork.Commit();
         }
 
-        private async void ValidateMessageForCreation(string userId, MessageForCreationDto messageForCreationDto)
+        private async Task ValidateMessageForCreation(string userId, MessageForCreationDto messageForCreationDto)
         {
             if (userId != messageForCreationDto.UserId)
             {
@@ -86,7 +86,7 @@ namespace SocialNetwork.BLL.Services
             }
         }
 
-        private void ValidateMessage(string userId, Message message)
+        private static void ValidateMessage(string userId, Message message)
         {
             if (message == null)
             {

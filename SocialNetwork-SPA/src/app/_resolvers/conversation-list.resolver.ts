@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Conversation } from '../_models/conversation';
 import { Observable, of } from 'rxjs';
 import { ConversationService } from '../_services/conversation.service';
@@ -11,8 +11,11 @@ export class ConversationListResolver implements Resolve<Conversation[]> {
     pageNumber = 1;
     pageSize = 10;
 
-    constructor(private conversationService: ConversationService, private router: Router,
-                private alertify: AlertifyService) {}
+    constructor(
+        private conversationService: ConversationService,
+        private router: Router,
+        private alertify: AlertifyService
+    ) { }
 
     resolve(route: ActivatedRouteSnapshot): Observable<Conversation[]> {
         return this.conversationService.getConversations(this.pageNumber, this.pageSize).pipe(
@@ -24,4 +27,5 @@ export class ConversationListResolver implements Resolve<Conversation[]> {
             })
         );
     }
+
 }

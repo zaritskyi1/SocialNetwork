@@ -1,4 +1,4 @@
-import { UserForList } from './userForList';
+import { UserForList } from './user-for-list';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 
 export interface MessageReport {

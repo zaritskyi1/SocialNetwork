@@ -6,12 +6,9 @@ using SocialNetwork.BLL.DTOs.MessageReport;
 using SocialNetwork.BLL.Helpers;
 using SocialNetwork.BLL.Services.Interfaces;
 using SocialNetwork.Web.Extensions;
-using SocialNetwork.Web.Filters;
 
 namespace SocialNetwork.Web.Controllers
 {
-    [ServiceFilter(typeof(UserActivityActionFilter))]
-    [Authorize]
     [Route("api/report/")]
     [ApiController]
     public class ReportController : ControllerBase
@@ -45,6 +42,7 @@ namespace SocialNetwork.Web.Controllers
             return paginationResult.Result;
         }
 
+        [Authorize(Policy = "RequireAdminModeratorRole")]
         [HttpDelete("messages/{id}/decline")]
         public async Task<IActionResult> DeclineReportedMessage(string id)
         {
@@ -52,6 +50,7 @@ namespace SocialNetwork.Web.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = "RequireAdminModeratorRole")]
         [HttpDelete("messages/{id}/accept")]
         public async Task<IActionResult> AcceptReportedMessage(string id)
         {

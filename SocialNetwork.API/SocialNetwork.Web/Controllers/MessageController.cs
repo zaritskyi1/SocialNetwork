@@ -1,15 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.BLL.DTOs.Message;
 using SocialNetwork.BLL.Services.Interfaces;
 using SocialNetwork.Web.Extensions;
-using SocialNetwork.Web.Filters;
 
 namespace SocialNetwork.Web.Controllers
 {
-    [Authorize]
-    [ServiceFilter(typeof(UserActivityActionFilter))]
     [Route("api/messages/")]
     [ApiController]
     public class MessageController : ControllerBase

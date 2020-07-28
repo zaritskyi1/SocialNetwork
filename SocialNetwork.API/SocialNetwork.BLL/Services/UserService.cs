@@ -61,7 +61,12 @@ namespace SocialNetwork.BLL.Services
 
             _mapper.Map(userForUpdate, user);
 
-            await _unitOfWork.Commit();
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                throw new IdentityException(result.Errors);
+            }
         }
 
         public async Task UpdateUserActivity(string id, DateTime date)
@@ -75,7 +80,12 @@ namespace SocialNetwork.BLL.Services
 
             user.LastActive = date;
 
-            await _unitOfWork.Commit();
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                throw new IdentityException(result.Errors);
+            }
         }
     }
 }

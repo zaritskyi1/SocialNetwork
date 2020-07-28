@@ -8,9 +8,10 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  jwtHelper = new JwtHelperService();
-
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private jwtHelper: JwtHelperService
+  ) { }
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
@@ -18,4 +19,5 @@ export class AppComponent implements OnInit {
       this.authService.decodedToken = this.jwtHelper.decodeToken(token);
     }
   }
+
 }

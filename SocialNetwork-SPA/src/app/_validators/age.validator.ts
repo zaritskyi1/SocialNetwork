@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export function ageValidator(age: number): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {

@@ -18,22 +18,70 @@ import { UserListResolver } from './_resolvers/user-list.resolver';
 import { UserListComponent } from './user/user-list/user-list.component';
 
 export const appRoutes: Routes = [
-    { path: 'home', component: HomeComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
     {
-        path: '',
-        runGuardsAndResolvers: 'always',
-        canActivate: [AuthGuard],
-        children: [
-            { path: 'friends', component: FriendshipInfoComponent, resolve: {friendships: FriendListResolver} },
-            { path: 'user/edit', component: UserEditComponent, resolve: { user: UserEditResolver} },
-            { path: 'user/:id', component: UserDetailComponent, resolve: { user: UserDetailResolver } },
-            { path: 'users', component: UserListComponent, resolve: { users: UserListResolver } },
-            { path: 'conversations/:id', component: ConversationDetailComponent, resolve: { conversation: ConversationDetailResolver } },
-            { path: 'conversations', component: ConversationListComponent, resolve: { conversations: ConversationListResolver } },
-            { path: 'admin', component: AdminPanelComponent, data: {roles: ['Administrator', 'Moderator']} }
-        ]
+        path: 'home',
+        component: HomeComponent
     },
-    { path: '**', redirectTo: 'home', pathMatch: 'full' }
+    {
+        path: 'login',
+        component: LoginComponent
+    },
+    {
+        path: 'register',
+        component: RegisterComponent
+    },
+    {
+        path: 'friends',
+        component: FriendshipInfoComponent,
+        resolve: {friendships: FriendListResolver},
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: 'user/edit',
+        component: UserEditComponent,
+        resolve: { user: UserEditResolver},
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: 'user/:id',
+        component: UserDetailComponent,
+        resolve: { user: UserDetailResolver },
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: 'users',
+        component: UserListComponent,
+        resolve: { users: UserListResolver },
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: 'conversations/:id',
+        component: ConversationDetailComponent,
+        resolve: { conversation: ConversationDetailResolver },
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: 'conversations',
+        component: ConversationListComponent,
+        resolve: { conversations: ConversationListResolver },
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: 'admin',
+        component: AdminPanelComponent,
+        data: {roles: ['Administrator', 'Moderator']},
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: '**',
+        redirectTo: 'home',
+        pathMatch: 'full'
+    }
 ];

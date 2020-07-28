@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserForList } from 'src/app/_models/userForList';
+import { UserForList } from 'src/app/_models/user-for-list';
 
 @Component({
   selector: 'app-user-card',
@@ -7,8 +7,7 @@ import { UserForList } from 'src/app/_models/userForList';
   styleUrls: ['./user-card.component.css']
 })
 export class UserCardComponent implements OnInit {
-  @Input()
-  user: UserForList;
+  @Input() user: UserForList;
 
   constructor() { }
 

@@ -8,8 +8,11 @@ import { of, Observable } from 'rxjs';
 
 @Injectable()
 export class UserDetailResolver implements Resolve<User> {
-    constructor(private userService: UserService, private router: Router,
-                private alertify: AlertifyService) { }
+    constructor(
+        private userService: UserService,
+        private router: Router,
+        private alertify: AlertifyService
+    ) { }
 
     resolve(route: ActivatedRouteSnapshot): Observable<User> {
         return this.userService.getUser(route.params.id).pipe(

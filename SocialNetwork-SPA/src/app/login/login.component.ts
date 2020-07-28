@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
@@ -13,8 +12,11 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor(private authService: AuthService, private alertify: AlertifyService,
-              private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private alertify: AlertifyService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -37,4 +39,5 @@ export class LoginComponent implements OnInit {
       this.alertify.error(error);
     });
   }
+
 }

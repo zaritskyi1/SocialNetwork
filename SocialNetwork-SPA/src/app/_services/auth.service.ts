@@ -27,11 +27,15 @@ export class AuthService {
       );
   }
 
+  logout() {
+    localStorage.removeItem('token');
+  }
+
   register(model: any) {
     return this.http.post(this.baseUrl + 'register', model);
   }
 
-  loggedIn() {
+  loggedIn(): boolean {
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
   }
@@ -55,5 +59,17 @@ export class AuthService {
 
   getCurrentUserId(): string {
     return this.decodedToken.nameid;
+  }
+
+  hasAdminRights(): boolean {
+    return (this.decodedToken.role as Array<string>).includes('Administrator');
+  }
+
+  hasModeratorRights(): boolean {
+    return (this.decodedToken.role as Array<string>).includes('Moderator');
+  }
+
+  hasAdminAccess(): boolean {
+    return this.hasRoles(['Administrator', 'Moderator']);
   }
 }

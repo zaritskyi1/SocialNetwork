@@ -10,4 +10,5 @@ export class TimeAgoExtendsPipe extends TimeAgoPipe {
   transform(value: string): string {
     return super.transform(value);
   }
+
 }

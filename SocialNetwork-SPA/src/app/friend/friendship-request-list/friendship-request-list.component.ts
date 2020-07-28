@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { FriendService } from 'src/app/_services/friend.service';
-import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
+import { Pagination } from 'src/app/_models/pagination';
+import { PaginatedResult } from 'src/app/_models/paginated-result';
 import { FriendshipWithUser } from 'src/app/_models/friendship-with-user';
 import { PageEvent } from '@angular/material/paginator';
 
@@ -14,7 +15,10 @@ export class FriendshipRequestListComponent implements OnInit {
   friendships: FriendshipWithUser[];
   pagination: Pagination;
 
-  constructor(private friendService: FriendService,  private alertify: AlertifyService) { }
+  constructor(
+    private friendService: FriendService,
+    private alertify: AlertifyService
+  ) { }
 
   onPageChange(event: PageEvent) {
     this.pagination.currentPage = event.pageIndex + 1;
@@ -34,12 +38,12 @@ export class FriendshipRequestListComponent implements OnInit {
 
   loadFriendRequestList() {
     this.friendService.getFriendsRequests(this.pagination.currentPage, this.pagination.itemsPerPage)
-    .subscribe((result: PaginatedResult<FriendshipWithUser[]>) => {
-      this.friendships = result.result;
-      this.pagination = result.pagination;
-    }, error => {
-      this.alertify.error(error);
-    });
+      .subscribe((result: PaginatedResult<FriendshipWithUser[]>) => {
+        this.friendships = result.result;
+        this.pagination = result.pagination;
+      }, error => {
+        this.alertify.error(error);
+      });
   }
 
   acceptFriendRequest(id: string) {
@@ -63,4 +67,5 @@ export class FriendshipRequestListComponent implements OnInit {
       }
     );
   }
+
 }

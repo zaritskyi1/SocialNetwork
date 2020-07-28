@@ -10,7 +10,7 @@
     <button mat-button [matMenuTriggerFor]="menu">Welcome {{authService.decodedToken?.unique_name | titlecase}}!</button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item [routerLink]="['/user/edit']">Edit Profile</button>
-      <button mat-menu-item [routerLink]="['/admin']">Admin Panel</button>
+      <button *ngIf="authService.hasAdminAccess()" mat-menu-item [routerLink]="['/admin']">Admin Panel</button>
       <button (click)="logout()" mat-menu-item>Logout</button>
     </mat-menu>
   </div>

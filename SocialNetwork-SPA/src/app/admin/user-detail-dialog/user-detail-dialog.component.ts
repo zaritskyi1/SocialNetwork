@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { UserForList } from 'src/app/_models/userForList';
+import { UserForList } from 'src/app/_models/user-for-list';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({

@@ -29,8 +29,8 @@ namespace SocialNetwork.BLL.MappingProfiles
 
 
             CreateMap<UserForRegisterDto, User>()
-                .ForMember(u => u.LastActive, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(u => u.Created, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(u => u.LastActive, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(u => u.Created, opt => opt.MapFrom(src => DateTime.UtcNow))
                 .ForMember(u => u.UserName, opt => opt.MapFrom(src => src.UserName.ToLower()));
 
             CreateMap<UserForUpdateDto, User>();
@@ -39,7 +39,7 @@ namespace SocialNetwork.BLL.MappingProfiles
         private void ConfigureMessageMapping()
         {
             CreateMap<MessageForCreationDto, Message>()
-                .ForMember(m => m.CreatedDate, opt => opt.MapFrom(src => DateTime.Now));
+                .ForMember(m => m.CreatedDate, opt => opt.MapFrom(src => DateTime.UtcNow));
         }
 
         private void ConfigureFriendshipMapping()

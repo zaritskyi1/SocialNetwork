@@ -16,8 +16,12 @@ export class UserEditComponent implements OnInit {
   editForm: FormGroup;
   user: User;
 
-  constructor(private route: ActivatedRoute, private userService: UserService,
-              private authService: AuthService, private alertifyService: AlertifyService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private authService: AuthService,
+    private alertifyService: AlertifyService
+  ) { }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
@@ -29,9 +33,7 @@ export class UserEditComponent implements OnInit {
 
   editUserData() {
     if (this.editForm.dirty) {
-      const inputDate = new Date(this.editForm.value.dateOfBirth);
-      const utcDate = Date.UTC(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate());
-      this.editForm.value.dateOfBirth = new Date(utcDate);
+      this.formatDateToUtc();
 
       this.userService.updateUser(
         this.authService.decodedToken.nameid,
@@ -75,4 +77,11 @@ export class UserEditComponent implements OnInit {
       ])
     });
   }
+
+  private formatDateToUtc() {
+    const inputDate = new Date(this.editForm.value.dateOfBirth);
+    const utcDate = Date.UTC(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate());
+    this.editForm.value.dateOfBirth = new Date(utcDate);
+  }
+
 }

@@ -11,8 +11,11 @@ export class FriendListResolver implements Resolve<FriendshipWithUser[]> {
     pageNumber = 1;
     pageSize = 10;
 
-    constructor(private friendshipService: FriendService, private router: Router,
-                private alertify: AlertifyService) { }
+    constructor(
+        private friendshipService: FriendService,
+        private router: Router,
+        private alertify: AlertifyService
+    ) { }
 
     resolve(route: ActivatedRouteSnapshot): Observable<FriendshipWithUser[]> {
         return this.friendshipService.getFriends(this.pageNumber, this.pageSize).pipe(

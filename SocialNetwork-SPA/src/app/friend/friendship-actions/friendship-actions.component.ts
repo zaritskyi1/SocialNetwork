@@ -15,8 +15,11 @@ export class FriendshipActionsComponent implements OnInit {
   @Input() userId: string;
   @Input() currentUserId: string;
 
-  constructor(private friendService: FriendService, private alertify: AlertifyService,
-              private userService: UserService) { }
+  constructor(
+    private friendService: FriendService,
+    private alertify: AlertifyService,
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
     this.loadFriendship();
@@ -80,4 +83,5 @@ export class FriendshipActionsComponent implements OnInit {
       }
     );
   }
+
 }

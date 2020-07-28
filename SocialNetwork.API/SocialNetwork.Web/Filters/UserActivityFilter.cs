@@ -21,7 +21,7 @@ namespace SocialNetwork.Web.Filters
 
             var userId = context.HttpContext.GetUserId();
 
-            await _userService.UpdateUserActivity(userId, DateTime.Now);
+            await _userService.UpdateUserActivity(userId, DateTime.UtcNow);
         }
     }
 }
